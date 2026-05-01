@@ -2,3 +2,4 @@ Flask
 Flask-MySQLdb
 mysql-connector-python
 gunicorn
+flask-cors
