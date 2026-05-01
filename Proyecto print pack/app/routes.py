@@ -54,7 +54,7 @@ def login():
     cursor.close()
 
     if user:
-        session['usuario'] = user['usuario']
+        session['usuario'] = user[1]
         session['es_admin'] = user['es_admin']
         return jsonify({'ok': True, 'es_admin': user['es_admin']})
     else:
