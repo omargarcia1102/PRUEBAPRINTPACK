@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrintPack Caribe - Inventario</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/INVENTARIOCSS.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <a href={{ url_for('main.inicio') }}>
+        <img src="https://printpackcaribe.com/wp-content/uploads/2025/08/ECOBOLSAS-CARIBE-PRINTPACK-LOGOS-4-scaled-324x141.png" alt="Logo">
+    </div>
+    <nav>
+        <ul>
+            <li><a href={{ url_for('main.inicio') }}>Inicio</a></li>
+            <li><a href={{ url_for('main.procesos') }}>Procesos</a></li>
+            <li><a href={{ url_for('main.productos') }}>Productos</a></li>
+            <li><a href={{ url_for('main.contacto') }}>Contáctanos</a></li>
+            <li><a href={{ url_for('main.inventario') }} class="active">Inventario</a></li>
+        </ul>
+    </nav>
+    <a href="{{ url_for('main.logout') }}" id="auth-button">Cerrar Sesión (Admin)</a>
+</header>
+
+<main>
+    <section id="inventario-section">
+        <h2>Gestión de Inventario</h2>
+
+        <div class="admin-options">
+            <a href="#" class="option-active" onclick="mostrarSubSeccionInventario('agregar', this); return false;"><i class="fa-solid fa-plus-circle"></i> Agregar Producto</a>
+            <a href="#" onclick="mostrarSubSeccionInventario('editar', this); return false;"><i class="fa-solid fa-edit"></i> Editar Producto</a>
+            <a href="#" onclick="mostrarSubSeccionInventario('borrar', this); return false;"><i class="fa-solid fa-trash-alt"></i> Borrar Producto</a>
+        </div>
+
+        <div id="contenedor-tabla-stock" style="width: 100%; margin: 20px 0; overflow-x: auto;">
+    <table style="width: 100%; border-collapse: collapse; background: rgba(0,0,0,0.25); border-radius: 12px; overflow: hidden; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.05);">
+        <thead>
+            <tr style="background: rgba(255,255,255,0.1); text-align: left; color: #4F72E6;">
+                <th style="padding: 12px;">Producto</th>
+                <th style="padding: 12px;">Estado Stock</th>
+                <th style="padding: 12px;">Ubicación</th>
+            </tr>
+        </thead>
+        <tbody id="cuerpo-tabla">
+            </tbody>
+    </table>
+</div>
+
+        <div id="inventario-sub-content">
+            <div id="form-agregar" class="inventario-form active-form">
+                <h3>Añadir Nuevo Producto</h3>
+                <form>
+                    <input type="text" placeholder="Nombre del producto" required>
+                    <input type="text" placeholder="Código interno / SKU" required>
+                    <select required>
+                        <option value="">Tipo de producto</option>
+                        <option>Bolsa</option>
+                        <option>Película</option>
+                        <option>Laminado</option>
+                        <option>Etiqueta</option>
+                        <option>Rollo</option>
+                    </select>
+                    <select required>
+                        <option value="">Categoría / Proceso</option>
+                        <option>Extrusión</option>
+                        <option>Laminación</option>
+                        <option>Impresión</option>
+                        <option>Corte y Refile</option>
+                        <option>Sellado</option>
+                    </select>
+                    <input type="number" placeholder="Capas (1–7)" min="1" max="7">
+                    <input type="number" placeholder="Espesor (micras)" min="10">
+                    <input type="text" placeholder="Material base (Ej: BOPP, CPP, PE)">
+                    <input type="text" placeholder="Color / impresión">
+                    <input type="text" placeholder="Dimensiones (Ej: 50x70 cm)">
+                    <input type="number" placeholder="Peso unitario (kg)" step="0.01">
+                    <input type="number" placeholder="Cantidad inicial en stock" required>
+                    <select>
+                        <option value="">Unidad de medida</option>
+                        <option>kg</option>
+                        <option>unidades</option>
+                        <option>metros</option>
+                        <option>rollos</option>
+                    </select>
+                    <input type="text" placeholder="Ubicación / Bodega">
+                    <input type="text" placeholder="Proveedor o cliente asociado">
+                    <input type="number" placeholder="Costo unitario ($)" step="0.01">
+                    <input type="date" placeholder="Fecha de ingreso">
+                    <textarea placeholder="Notas o especificaciones técnicas" style="grid-column: span 2;"></textarea>
+                    <button type="submit" style="grid-column: span 2;">Guardar Producto</button>
+                </form>
+            </div>
+
+            <div id="form-editar" class="inventario-form">
+                <h3>Editar Producto Existente</h3>
+                <form>
+                    <label style="grid-column: span 2;">Selecciona un producto</label>
+                    <select id="select-editar-producto" required style="grid-column: span 2;">
+                        <option value="">-- Selecciona un producto --</option>
+                    </select>
+                    <input type="text" placeholder="Nombre del producto">
+                    <input type="text" placeholder="Código / ID interno">
+                    <select id="select-tipo-editar">
+    <option value="">Tipo de producto</option>
+    <option>Bolsa</option>
+    <option>Película</option>
+    <option>Laminado</option>   <!-- faltaba -->
+    <option>Etiqueta</option>  <!-- faltaba -->
+    <option>Rollo</option>     <!-- faltaba -->
+</select>
+                    <input type="number" placeholder="Capas (1-7)">
+                    <input type="number" placeholder="Espesor (micras)">
+                    <input type="text" placeholder="Color / impresión">
+                    <input type="number" placeholder="Cantidad en stock">
+                    <input type="text" placeholder="Ubicación / Bodega">
+                    <input type="number" placeholder="Costo unitario ($)">
+                    <input type="date" placeholder="Fecha de modificación">
+                    <textarea placeholder="Notas adicionales" style="grid-column: span 2;"></textarea>
+                    <button type="submit" style="grid-column: span 2;">Actualizar Producto</button>
+                </form>
+            </div>
+
+            <div id="form-borrar" class="inventario-form">
+                <h3>Eliminar Producto</h3>
+                <form>
+                    <select id="select-eliminar-producto" required style="grid-column: span 2;">
+                        <option value="">-- Selecciona un producto --</option>
+                    </select>
+                    <p style="grid-column: span 2; color: #ffcccc;">**Advertencia:** Acción permanente.</p>
+                    <button type="button" class="btn-delete" onclick="confirmarEliminacion()">Confirmar Eliminación</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>Copyright © 2025 PrintPack Caribe</footer>
+
+
+<script src="{{ url_for('static', filename='js/INVENTARIOJS.js') }}"></script>
+
+</body>
+</html>

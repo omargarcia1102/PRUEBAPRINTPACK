@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrintPack Caribe - Acceso</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ACCEDERCSS.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+    <a href={{ url_for('main.inicio') }} style="display: block; cursor: pointer;">
+        <img src="https://printpackcaribe.com/wp-content/uploads/2025/08/ECOBOLSAS-CARIBE-PRINTPACK-LOGOS-4-scaled-324x141.png" alt="Logo" style="pointer-events: none;">
+    </a>
+</div>
+        <nav>
+            <ul>
+                <li><a href={{ url_for('main.inicio') }}>Inicio</a></li>
+                <li><a href={{ url_for('main.procesos') }}>Procesos</a></li>
+                <li><a href={{ url_for('main.productos') }}>Productos</a></li>
+                <li><a href={{ url_for('main.contacto') }}>Contáctanos</a></li>
+                <li id="inventario-link" style="display:none;"><a href={{ url_for('main.inventario') }}>Inventario</a></li>
+            </ul>
+        </nav>
+        <a href={{ url_for('main.acceder') }}  id="auth-button" class="btn-nav">Acceder</a>
+    </header>
+
+    <main>
+        <div class="login-container">
+            <div class="login-image">
+                <img src="https://www.uniban.com/wp-content/uploads/2022/11/bolsas-para-agricultura-polyban-scaled.jpg" alt="Fábrica">
+            </div>
+
+            <div class="login-card">
+                <div class="circle-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                
+                <h3 style="margin-bottom: 20px; font-weight: 500;">Acceso Administrativo</h3>
+
+                <form id="loginForm" style="width: 100%;">
+    <div class="input-group">
+        <i class="fas fa-user"></i>
+        <input type="text" id="userInput" class="input-field" placeholder="Nombre de Usuario" required>
+    </div>
+
+    <div class="input-group">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="passInput" class="input-field" placeholder="Contraseña" required>
+    </div>
+
+    <button type="submit" class="login-btn">INICIAR SESIÓN</button>
+    
+    <div class="secondary-links">
+        <a href="#" onclick="alert('Contacte al área de sistemas')">¿Olvidó su contraseña?</a>
+        <a href={{ url_for('main.inicio') }}><i class="fas fa-arrow-left"></i> Volver a la página principal</a>
+    </div>
+    <p class="aviso-legal">
+        Aviso: Este sistema es para uso exclusivo del personal autorizado de PrintPack Caribe. 
+        Toda actividad es monitoreada.
+    </p>
+</form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        Copyright © 2025 PrintPack Caribe - Powered by PrintPack Caribe
+    </footer>
+
+    
+
+    <script src="{{ url_for('static', filename='js/ACCEDERJS.js') }}"></script>
+
+</body>
+</html>

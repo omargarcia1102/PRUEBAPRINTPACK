@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrintPack Caribe - Productos</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/PRODUCTOSCSS.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <a href={{ url_for('main.inicio') }} >
+                <img src="https://printpackcaribe.com/wp-content/uploads/2025/08/ECOBOLSAS-CARIBE-PRINTPACK-LOGOS-4-scaled-324x141.png" alt="PrintPack Caribe">
+            </a>
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href={{ url_for('main.inicio') }} >Inicio</a></li>
+                <li><a href={{ url_for('main.procesos') }}>Procesos</a></li>
+                <li><a href={{ url_for('main.productos') }} class="active">Productos</a></li>
+                <li><a href={{ url_for('main.contacto') }}>Contáctanos</a></li>
+                <li id="inventario-link" style="display: none;"><a href={{ url_for('main.inventario') }}>Inventario</a></li>
+            </ul>
+        </nav>
+
+        <a href={{ url_for('main.acceder') }} id="auth-button" class="btn-nav">Acceder</a>
+    </header>
+
+    <main>
+        <div id="productos-section">
+            <h2>Nuestra Línea de Productos</h2>
+            <div class="productos-grid">
+                
+                <div class="producto-card">
+                    <h3>CX3 - AGA</h3>
+                    <p><strong>Extrusión</strong>Coextrusión BLOW FILM (3 capas)</p>
+                    <p><strong>Impresión</strong>Hasta 8 colores</p>
+                    <p><strong>Uso</strong>Arroz, harina, granos y aplicaciones de alta resistencia mecánica.</p>
+                </div>
+
+                <div class="producto-card">
+                    <h3>Bolsas de Reempaque</h3>
+                    <p><strong>Estructura</strong>Mono o coextrusión en polietilenos (1 a 7 capas).</p>
+                    <p><strong>Sostenibilidad</strong>Oxi-biodegradables.</p>
+                    <p><strong>Acabado</strong>Sellado lateral o fondo, grafilado o liso.</p>
+                </div>
+
+                <div class="producto-card">
+                    <h3>Termoencogibles</h3>
+                    <p><strong>Capas</strong>3 a 7 capas</p>
+                    <p><strong>Aplicabilidad</strong>Envoltura de envases secundarios y cajas de cartón corrugado.</p>
+                </div>
+
+                <div class="producto-card">
+                    <h3>Lámina para Colchones</h3>
+                    <p><strong>Ancho</strong>Hasta 3 metros de ancho.</p>
+                    <p><strong>Propiedades</strong>Alto brillo y excelente rango de sellado.</p>
+                    <p><strong>Uso</strong>Empaque de colchones, espumas y almohadas.</p>
+                </div>
+
+                <div class="producto-card">
+                    <h3>Bicolor para Leche</h3>
+                    <p><strong>Capas</strong>7 capas</p>
+                    <p><strong>Barrera</strong>Alta barrera al oxígeno. Capa negra interna y blanca externa.</p>
+                    <p><strong>Aplicabilidad</strong>Leche líquida y ración animal.</p>
+                </div>
+
+                <div class="producto-card">
+                    <h3>Bolsas al Vacío</h3>
+                    <p><strong>Capas</strong>7 capas</p>
+                    <p><strong>Protección</strong>Barrera media o alta al oxígeno.</p>
+                    <p><strong>Uso</strong>Quesos, embutidos y proteínas.</p>
+                </div>
+
+                <div class="producto-card">
+                    <h3>BOPP (Polipropileno)</h3>
+                    <p><strong>Características</strong>Alto brillo y excelente barrera a la humedad.</p>
+                    <p><strong>Uso</strong>Snacks, helados, galletas, etiquetas y papel higiénico.</p>
+                </div>
+
+                <div class="producto-card">
+                    <h3>PAPERLIKE</h3>
+                    <p><strong>Innovación</strong>Combinación de materiales con efecto y tacto de papel.</p>
+                    <p><strong>Resistencia</strong>A prueba de humedad y alta resistencia al desgarro.</p>
+                    <p><strong>Uso</strong>Mantequillas, margarinas y grasas.</p>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-cta">
+            <p style="font-size: 1.2em; margin-bottom: 15px;">¿Necesitas ayuda? ¡Aquí todo en plásticos flexibles!</p>
+            <a href={{ url_for('main.contacto') }} class="btn-contacto-footer">CONTÁCTENOS</a>
+        </div>
+        <p class="copyright">
+            Copyright © 2025 PrintPack Caribe - Powered by PrintPack Caribe
+        </p>
+    </footer>
+
+    
+<script src="{{ url_for('static', filename='js/PRODUCTOSJS.js') }}"></script>
+</script>
+</body>
+</html>

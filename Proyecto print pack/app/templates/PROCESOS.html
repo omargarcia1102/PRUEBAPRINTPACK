@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrintPack Caribe - Procesos</title>
+
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/PROCESOSCSS.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <a href={{ url_for('main.inicio') }}>
+                <img src="https://printpackcaribe.com/wp-content/uploads/2025/08/ECOBOLSAS-CARIBE-PRINTPACK-LOGOS-4-scaled-324x141.png" alt="PrintPack Caribe">
+            </a>
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href={{ url_for('main.inicio') }} >Inicio</a></li>
+                <li><a href={{ url_for('main.procesos') }} class="active">Procesos</a></li>
+                <li><a href={{ url_for('main.productos') }}>Productos</a></li>
+                <li><a href={{ url_for('main.contacto') }}>Contáctanos</a></li>
+                <li id="inventario-link" style="display: none;"><a href={{ url_for('main.inventario') }}>Inventario</a></li>
+            </ul>
+        </nav>
+
+        <a href={{ url_for('main.acceder') }}  id="auth-button" class="btn-nav">Acceder</a>
+    </header>
+
+    <main>
+        <div id="procesos-section">
+            <h2>Nuestros Procesos</h2>
+            <div class="procesos-grid">
+                <div class="proceso-card">
+                    <div class="proceso-header">
+                        <i class="fa fa-flask"></i>
+                        <h3>Laboratorio</h3>
+                    </div>
+                    <p>Equipos de medición avanzados para coeficiente de fricción, fugas, migración de oxígeno y análisis de estructuras laminadas.</p>
+                </div>
+
+                <div class="proceso-card">
+                    <div class="proceso-header">
+                        <i class="fa fa-cogs"></i>
+                        <h3>Extrusión</h3>
+                    </div>
+                    <p>70 líneas de extrusión para fabricar materiales de 1 a 7 capas. Capacidad productiva superior a <strong>1.500 toneladas mensuales</strong>.</p>
+                </div>
+
+                <div class="proceso-card">
+                    <div class="proceso-header">
+                        <i class="fa fa-palette"></i>
+                        <h3>Diseño y Preprensa</h3>
+                    </div>
+                    <p>Conversión de diseños digitalizados con tecnología de última generación y estrictos acuerdos de confidencialidad.</p>
+                </div>
+
+                <div class="proceso-card">
+                    <div class="proceso-header">
+                        <i class="fa fa-print"></i>
+                        <h3>Impresión</h3>
+                    </div>
+                    <p>Impresoras Gearless de 8 colores con calidad HD y sistemas de inspección automatizados en línea.</p>
+                </div>
+
+                <div class="proceso-card">
+                    <div class="proceso-header">
+                        <i class="fa fa-layer-group"></i>
+                        <h3>Laminación</h3>
+                    </div>
+                    <p>Línea Solvent Less para bi y trilaminados usando BOPP, CPP, metalizados y coextruidos de alta barrera.</p>
+                </div>
+
+                <div class="proceso-card">
+                    <div class="proceso-header">
+                        <i class="fa fa-stamp"></i>
+                        <h3>Sellado</h3>
+                    </div>
+                    <p>Fabricación de bolsas con selle de fondo, lateral, Wicket, Doypack con zipper y Stand-up pouch.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-cta">
+            <p style="font-size: 1.2em; margin-bottom: 15px;">¿Necesitas ayuda? ¡Aquí todo en plásticos flexibles!</p>
+            <a href={{ url_for('main.contacto') }} class="btn-contacto-footer">CONTÁCTENOS</a>
+        </div>
+        <p class="copyright">
+            Copyright © 2025 PrintPack Caribe - Powered by PrintPack Caribe
+        </p>
+    </footer>
+
+<script src="{{ url_for('static', filename='js/PROCESOSJS.js') }}"></script>
+</script>
+</body>
+</html>
