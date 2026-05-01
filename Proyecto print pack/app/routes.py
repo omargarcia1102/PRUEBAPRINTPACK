@@ -1,3 +1,4 @@
+import MySQLdb.cursors
 from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for
 from app import mysql
 
