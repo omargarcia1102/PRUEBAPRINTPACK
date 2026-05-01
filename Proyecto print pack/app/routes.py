@@ -75,7 +75,8 @@ def logout():
 
 @main.route('/api/productos', methods=['GET'])
 def get_productos():
-    cursor = mysql.connection.cursor()
+    # CAMBIO: Usar DictCursor para que los datos tengan nombre
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor) 
     cursor.execute("SELECT * FROM productos")
     resultado = cursor.fetchall()
     cursor.close()
