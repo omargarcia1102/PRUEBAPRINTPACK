@@ -55,7 +55,7 @@ def login():
 
     if user:
         session['usuario'] = user[1]
-        session['es_admin'] = user['es_admin']
+        session['es_admin'] = user[3]
         return jsonify({'ok': True, 'es_admin': user['es_admin']})
     else:
         return jsonify({'ok': False, 'mensaje': 'Credenciales incorrectas'}), 401
