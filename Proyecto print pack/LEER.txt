@@ -7,3 +7,6 @@ DB_NAME=
 SECRET_KEY=
 
 cambiar config secret key
+
+DB_NAME=printpack_db
+SECRET_KEY=printpack2025
