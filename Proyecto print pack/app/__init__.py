@@ -7,7 +7,7 @@ mysql = MySQL()
 
 def create_app():
     app = Flask(__name__)
-    app.secret_key = 'adso_sena_print_pack_2026'
+    app.config.from_object(Config)
     CORS(app)
 
     from config import Config
