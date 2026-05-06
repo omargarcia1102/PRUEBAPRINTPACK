@@ -9,11 +9,10 @@ mysql = MySQL()
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
+    app.config['SESSION_PERMANENT'] = False
     CORS(app)
 
-    from config import Config
-    app.config.from_object(Config)
-    app.config['SESSION_PERMANENT'] = False
+
 
     mysql.init_app(app)
 
