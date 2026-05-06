@@ -8,6 +8,8 @@ class Config:
     MYSQL_PASSWORD = os.getenv("DB_PASSWORD")
     MYSQL_DB = os.getenv("DB_NAME")
     
+    SECRET_KEY = os.getenv("SECRET_KEY")
+    
     # Esta línea es la más importante para que funcione con Aiven
     MYSQL_CUSTOM_OPTIONS = {"ssl": {"ca": "ca.pem"}}
     SESSION_PERMANENT = False
