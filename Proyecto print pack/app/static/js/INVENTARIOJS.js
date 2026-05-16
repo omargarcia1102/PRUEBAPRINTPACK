@@ -146,7 +146,8 @@ async function confirmarEliminacion() {
             await cargarProductos();
         }
     }
-}
+} // <-- CAMBIO: Aquí cerramos correctamente confirmarEliminacion
+
 async function cargarHistorial() {
     const res = await fetch('/api/movimientos');
     const movimientos = await res.json();
@@ -177,7 +178,5 @@ async function cargarHistorial() {
             </tr>
         `;
     });
-}
+}// <-- CAMBIO: Aquí cierra bien cargarHistorial solo
 
-    
-}
