@@ -38,6 +38,7 @@
             <a href="#" class="option-active" onclick="mostrarSubSeccionInventario('agregar', this); return false;"><i class="fa-solid fa-plus-circle"></i> Agregar Producto</a>
             <a href="#" onclick="mostrarSubSeccionInventario('editar', this); return false;"><i class="fa-solid fa-edit"></i> Editar Producto</a>
             <a href="#" onclick="mostrarSubSeccionInventario('borrar', this); return false;"><i class="fa-solid fa-trash-alt"></i> Borrar Producto</a>
+            <a href="#" onclick="mostrarSubSeccionInventario('historial', this); return false;"><i class="fa-solid fa-history"></i> Historial</a>
         </div>
 
         <div id="contenedor-tabla-stock" style="width: 100%; margin: 20px 0; overflow-x: auto;">
@@ -138,6 +139,25 @@
                     <button type="button" class="btn-delete" onclick="confirmarEliminacion()">Confirmar Eliminación</button>
                 </form>
             </div>
+
+            <div id="form-historial" class="inventario-form">
+                <h3>Historial de Movimientos</h3>
+                <table style="width:100%; border-collapse:collapse;">
+                    <thead>
+                        <tr style="background:rgba(255,255,255,0.1); color:#4F72E6;">
+                            <th style="padding:10px;">Fecha</th>
+                            <th style="padding:10px;">Producto</th> 
+                            <th style="padding:10px;">Acción</th>
+                            <th style="padding:10px;">Usuario</th>
+                            <th style="padding:10px;">Stock anterior</th>
+                            <th style="padding:10px;">Stock nuevo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpo-historial"></tbody>
+                </table>
+            </div>
+
+            
         </div>
     </section>
 </main>
