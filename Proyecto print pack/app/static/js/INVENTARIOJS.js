@@ -146,6 +146,7 @@ async function confirmarEliminacion() {
             await cargarProductos();
         }
     }
+}
 async function cargarHistorial() {
     const res = await fetch('/api/movimientos');
     const movimientos = await res.json();
