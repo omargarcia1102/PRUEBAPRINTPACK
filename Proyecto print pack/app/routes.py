@@ -171,15 +171,13 @@ def actualizar_producto(id):
 def eliminar_producto(id):
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
-    # Obtener info antes de eliminar
+    # 1. Obtener info antes de eliminar
     cursor.execute("SELECT nombre, stock FROM productos WHERE id=%s", (id,))
     producto = cursor.fetchone()
     nombre_producto = producto['nombre'] if producto else ''
     stock_actual = producto['stock'] if producto else 0
 
-    cursor.execute("DELETE FROM productos WHERE id=%s", (id,))
-
-    # Registrar movimiento
+    # 2. Registrar movimiento PRIMERO
     cursor.execute("""
         INSERT INTO movimientos 
         (id_producto, nombre_producto, tipo_movimiento, usuario, detalle, stock_anterior, stock_nuevo)
@@ -188,15 +186,17 @@ def eliminar_producto(id):
         id,
         nombre_producto,
         session.get('usuario'),
-        f"Producto eliminado del inventario",
+        "Producto eliminado del inventario",
         stock_actual,
         0
     ))
 
+    # 3. Eliminar el producto DESPUÉS
+    cursor.execute("DELETE FROM productos WHERE id=%s", (id,))
+
     mysql.connection.commit()
     cursor.close()
     return jsonify({'ok': True})
-    
 
 @main.route('/api/movimientos', methods=['GET'])
 def get_movimientos():
