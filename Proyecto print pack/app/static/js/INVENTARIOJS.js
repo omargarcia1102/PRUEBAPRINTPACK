@@ -129,6 +129,8 @@ function mostrarSubSeccionInventario(tipo, elemento) {
     elemento.classList.add('option-active');
     document.querySelectorAll('.inventario-form').forEach(f => f.classList.remove('active-form'));
     document.getElementById(`form-${tipo}`).classList.add('active-form');
+
+     if (tipo === 'historial') cargarHistorial();
 }
 
 async function confirmarEliminacion() {
@@ -144,4 +146,37 @@ async function confirmarEliminacion() {
             await cargarProductos();
         }
     }
+async function cargarHistorial() {
+    const res = await fetch('/api/movimientos');
+    const movimientos = await res.json();
+    const cuerpo = document.getElementById('cuerpo-historial');
+    cuerpo.innerHTML = '';
+
+    const colores = {
+        'AGREGAR':  '#2ecc71',
+        'EDITAR':   '#f39c12',
+        'ELIMINAR': '#e74c3c'
+    };
+
+    movimientos.forEach(m => {
+        cuerpo.innerHTML += `
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.06);">
+                <td style="padding:10px; font-size:13px;">${m.fecha}</td>
+                <td style="padding:10px;">${m.nombre_producto}</td>
+                <td style="padding:10px;">
+                    <span style="background:${colores[m.tipo_movimiento]}; 
+                                 padding:3px 10px; border-radius:20px; 
+                                 font-size:12px; font-weight:600;">
+                        ${m.tipo_movimiento}
+                    </span>
+                </td>
+                <td style="padding:10px;">${m.usuario}</td>
+                <td style="padding:10px; text-align:center;">${m.stock_anterior}</td>
+                <td style="padding:10px; text-align:center;">${m.stock_nuevo}</td>
+            </tr>
+        `;
+    });
+}
+
+    
 }
