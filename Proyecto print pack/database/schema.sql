@@ -1,8 +1,7 @@
--- 1. Crear la base de datos para PrintPack
 CREATE DATABASE IF NOT EXISTS printpack_db;
 USE printpack_db;
 
--- 2. Crear tabla de usuarios para el login
+
 CREATE TABLE IF NOT EXISTS usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     usuario VARCHAR(50) UNIQUE NOT NULL,
@@ -10,7 +9,6 @@ CREATE TABLE IF NOT EXISTS usuarios (
     es_admin BOOLEAN DEFAULT FALSE
 );
 
--- 3. Crear tabla de productos (El inventario especializado)
 CREATE TABLE IF NOT EXISTS productos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(150) NOT NULL,
@@ -32,6 +30,18 @@ CREATE TABLE IF NOT EXISTS productos (
     notas TEXT
 );
 
--- 4. Crear usuario administrador de prueba
+CREATE TABLE movimientos (
+    id            INT AUTO_INCREMENT PRIMARY KEY,
+    id_producto   INT NULL,
+    nombre_producto VARCHAR(150),
+    tipo_movimiento ENUM('AGREGAR', 'EDITAR', 'ELIMINAR') NOT NULL,
+    usuario       VARCHAR(50) NOT NULL,
+    fecha         DATETIME DEFAULT CURRENT_TIMESTAMP,
+    detalle       TEXT,
+    stock_anterior INT,
+    stock_nuevo    INT,
+    FOREIGN KEY (id_producto) REFERENCES productos(id) ON DELETE SET NULL
+);
+
 INSERT IGNORE INTO usuarios (usuario, password, es_admin) 
 VALUES ('admin', 'admin123', TRUE);
