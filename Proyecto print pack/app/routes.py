@@ -76,7 +76,6 @@ def logout():
 
 @main.route('/api/productos', methods=['GET'])
 def get_productos():
-    # CAMBIO: Usar DictCursor para que los datos tengan nombre
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor) 
     cursor.execute("SELECT * FROM productos")
     resultado = cursor.fetchall()
@@ -106,7 +105,7 @@ def crear_producto():
     
     id_nuevo = cursor.lastrowid  # ID del producto recién creado
 
-    # Registrar movimiento
+   
     cursor.execute("""
         INSERT INTO movimientos 
         (id_producto, nombre_producto, tipo_movimiento, usuario, detalle, stock_anterior, stock_nuevo)
@@ -129,7 +128,7 @@ def actualizar_producto(id):
     d = request.get_json()
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
-    # Primero obtenemos el stock actual antes de editar
+  
     cursor.execute("SELECT nombre, stock FROM productos WHERE id=%s", (id,))
     producto_actual = cursor.fetchone()
     stock_anterior = producto_actual['stock'] if producto_actual else 0
@@ -148,7 +147,7 @@ def actualizar_producto(id):
         d.get('fecha'), d.get('notas'), id
     ))
 
-    # Registrar movimiento
+   
     cursor.execute("""
         INSERT INTO movimientos 
         (id_producto, nombre_producto, tipo_movimiento, usuario, detalle, stock_anterior, stock_nuevo)
@@ -171,13 +170,13 @@ def actualizar_producto(id):
 def eliminar_producto(id):
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
-    # 1. Obtener info antes de eliminar
+   
     cursor.execute("SELECT nombre, stock FROM productos WHERE id=%s", (id,))
     producto = cursor.fetchone()
     nombre_producto = producto['nombre'] if producto else ''
     stock_actual = producto['stock'] if producto else 0
 
-    # 2. Registrar movimiento PRIMERO
+   
     cursor.execute("""
         INSERT INTO movimientos 
         (id_producto, nombre_producto, tipo_movimiento, usuario, detalle, stock_anterior, stock_nuevo)
@@ -191,7 +190,7 @@ def eliminar_producto(id):
         0
     ))
 
-    # 3. Eliminar el producto DESPUÉS
+    
     cursor.execute("DELETE FROM productos WHERE id=%s", (id,))
 
     mysql.connection.commit()
@@ -208,7 +207,7 @@ def get_movimientos():
     """)
     resultado = cursor.fetchall()
     cursor.close()
-    # Convertir fechas a string para JSON
+   
     for row in resultado:
         if row.get('fecha'):
             row['fecha'] = row['fecha'].strftime('%Y-%m-%d %H:%M:%S')
