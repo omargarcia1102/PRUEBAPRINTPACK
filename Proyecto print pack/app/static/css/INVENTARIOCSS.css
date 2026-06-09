@@ -396,7 +396,30 @@ footer {
         font-size: 13px;
         padding: 14px;
     }
+
+    /* Tabla historial en móvil */
+    #form-historial table {
+    font-size: 11px;
+    }
+    #form-historial table th,
+    #form-historial table td {
+    padding: 6px 4px;
 }
+
+/* Ocultar columnas menos importantes en móvil */
+#form-historial table th:nth-child(5),
+#form-historial table td:nth-child(5),
+#form-historial table th:nth-child(6),
+#form-historial table td:nth-child(6) {
+    display: none;
+}
+
+#form-historial {
+    overflow-x: auto;
+}
+}
+
+
 
 /* ================================
    MÓVIL PEQUEÑO — hasta 400px
