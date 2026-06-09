@@ -312,6 +312,11 @@ footer {
     #inventario-sub-content {
         padding: 20px;
     }
+
+    #form-historial table td:last-child {
+    white-space: nowrap !important;
+    text-align: center !important; /* Opcional: centra los números para que se vea más ordenado */
+    }
 }
 
 /* ================================
@@ -404,7 +409,12 @@ footer {
     #form-historial table th,
     #form-historial table td {
     padding: 6px 4px;
-}
+    }
+
+    #form-historial table td:last-child {
+    white-space: nowrap !important;
+    text-align: center; /* Opcional: centra los números para que se vea más ordenado */
+    }
 
 
 
