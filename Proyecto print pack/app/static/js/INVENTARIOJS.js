@@ -102,6 +102,20 @@ async function cargarProductos() {
     actualizarTablaYSelects();
 }
 
+function convertirFecha(fechaUTC) {
+    const fecha = new Date(fechaUTC + ' UTC');
+    return fecha.toLocaleString('es-CO', {
+        timeZone: 'America/Bogota',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+    });
+}
+
 function actualizarTablaYSelects() {
     const cuerpo     = document.getElementById("cuerpo-tabla");
     const selectEdit = document.getElementById("select-editar-producto");
@@ -163,7 +177,7 @@ async function cargarHistorial() {
     movimientos.forEach(m => {
         cuerpo.innerHTML += `
             <tr style="border-bottom:1px solid rgba(255,255,255,0.06);">
-                <td style="padding:10px; font-size:13px;">${m.fecha}</td>
+                <td style="padding:10px; font-size:13px;">${convertirFecha(m.fecha)}</td>
                 <td style="padding:10px;">${m.nombre_producto}</td>
                 <td style="padding:10px;">
                     <span style="background:${colores[m.tipo_movimiento]}; 
