@@ -126,10 +126,19 @@ function actualizarTablaYSelects() {
     selectDel.innerHTML  = '<option value="">-- Selecciona --</option>';
 
     productos.forEach(p => {
+        const precio = p.costo 
+            ? new Intl.NumberFormat('es-CO', {
+                style: 'currency',
+                currency: 'COP',
+                minimumFractionDigits: 0
+              }).format(p.costo)
+            : 'No definido';
         cuerpo.innerHTML += `
             <tr>
                 <td style="padding:12px;">${p.nombre}</td>
+                <td style="padding:12px;">${p.codigo || '—'}</td>
                 <td style="padding:12px;">${p.stock} unidades</td>
+                <td style="padding:12px;">${precio}</td>
                 <td style="padding:12px;">${p.bodega}</td>
             </tr>`;
         const opt = `<option value="${p.id}">${p.nombre} (${p.codigo})</option>`;
