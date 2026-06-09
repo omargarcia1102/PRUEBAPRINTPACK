@@ -12,7 +12,7 @@ body {
 body {
     font-family: 'Poppins', sans-serif;
     color: #fff;
-    background: linear-gradient(135deg, #7d1b1b, #b53636, #4F72E6, #7d1b1b);
+    background: linear-gradient(135deg, #3a8abb  , #304166  , #2a346d   , #0c1752   );
     background-size: 400% 400%;
     animation: gradientAnimation 12s ease infinite;
     min-height: 100vh;
