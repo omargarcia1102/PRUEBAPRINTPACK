@@ -5,29 +5,21 @@
 }
 
 body {
-    background: linear-gradient(135deg, #0a4ad4, #426fca, #ce1d1d, #e27777, #b34642);
-    background-size: 400% 400%;
-    animation: gradientAnimation 15s ease infinite;
     min-height: 100vh;
     font-family: 'Poppins', sans-serif;
     display: flex;
     flex-direction: column;
     color: #fff;
     position: relative;
+    background: linear-gradient(135deg, #033f63  , #225381  , #829dcf   , #0c1752   );
+    background-size: 400% 400%;
+    animation: gradientShift 12s ease infinite;
 }
 
-@keyframes gradientAnimation {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
+@keyframes gradientShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 body::before {
@@ -49,9 +41,9 @@ header {
         justify-content: space-between;
         align-items: center;
         padding: 15px 40px;
-        background: rgba(0, 0, 0, 0.4);
+        background: rgba(185, 179, 179, 0.2);
         backdrop-filter: blur(5px);
-    
+        border-bottom: 1.5px solid rgba(8, 7, 7, 0.6) ;
         top: 0;
         z-index: 10;
     }
@@ -138,11 +130,11 @@ main {
     width: 100%;
     max-width: 1100px;
     padding: 60px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 38, 255, 0.3); 
     backdrop-filter: blur(10px);
-    border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    
+    border: 1px solid rgba(255, 253, 253, 0.5);
+   
 }
 
 .home-text {
@@ -171,7 +163,8 @@ main {
 .btn-primary {
     display: inline-block;
     padding: 12px 30px;
-    border-radius: 30px;
+    border-radius: 5px;
+    border: 1px rgb(255, 255, 255, 0.7) solid;
     text-decoration: none;
     font-weight: 600;
     background: linear-gradient(90deg, #337AFF, #0056B3);
@@ -182,6 +175,7 @@ main {
 }
 
 .btn-primary:hover {
+    color: #000000;
     transform: scale(1.05);
 }
 
@@ -205,18 +199,22 @@ footer {
 }
 
 .btn-contacto-footer {
-    background-color: #007bff;
+    background: linear-gradient(90deg, #337AFF, #0056B3);
     color: white;
-    padding: 12px 40px;
+    padding: 10px 30px;
     text-decoration: none;
-    border-radius: 25px;
+    border-radius: 5px;
+    border: 1px rgb(255, 255, 255, 0.7) solid;
     font-weight: bold;
     display: inline-block;
-    transition: background 0.3s;
+    transition: transform 0.3s;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .btn-contacto-footer:hover {
-    background-color: #0056b3;
+    color: #000;
+    transform: scale(1.05);
+    background-color: #007bff;
 }
 
 .copyright {
