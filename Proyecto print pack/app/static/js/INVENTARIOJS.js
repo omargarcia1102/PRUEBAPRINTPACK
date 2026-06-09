@@ -201,7 +201,7 @@ async function cargarHistorial() {
                 </span>
                 </td>
                 <td style="padding:8px 6px; font-size:12px;">${m.usuario}</td>
-                <td style="padding:8px 6px; font-size:12px; text-align:center;">
+                <td style="padding:8px 6px; font-size:12px; text-align:start;">
                     ${m.stock_anterior} → ${m.stock_nuevo}
                 </td>
             </tr>
