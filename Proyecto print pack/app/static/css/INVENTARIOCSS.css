@@ -173,6 +173,7 @@ main {
     margin: 18px 0 28px 0;
     flex-wrap: wrap;
     justify-content: center;
+    border-radius: 1px;
 }
 
 .admin-options a {
@@ -181,7 +182,7 @@ main {
     align-items: center;
     padding: 8px 14px;
     background: rgba(0, 0, 0, 0.28);
-    border-radius: 9px;
+    border-radius: 2px;
     text-decoration: none;
     color: #fff;
     font-weight: 600;
@@ -197,7 +198,7 @@ main {
 #inventario-sub-content {
     width: 100%;
     background: rgba(20, 7, 20, 0.35);
-    border-radius: 14px;
+    border-radius: 1px;
     padding: 28px;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(10px);
@@ -224,7 +225,7 @@ input,
 select,
 textarea {
     padding: 10px 12px;
-    border-radius: 8px;
+    border-radius: 2px;
     border: 1px solid rgba(255, 255, 255, 0.08);
     background: rgba(255, 255, 255, 0.05);
     color: #fff;
@@ -257,7 +258,7 @@ form button {
 .btn-delete {
     grid-column: span 2;
     padding: 10px;
-    border-radius: 8px;
+    border-radius: 2px;
     border: none;
     background: #c33;
     color: #fff;
