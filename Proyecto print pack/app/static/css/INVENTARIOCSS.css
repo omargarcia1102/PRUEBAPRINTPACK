@@ -315,7 +315,7 @@ footer {
 
     #form-historial table td:last-child {
     white-space: nowrap !important;
-    text-align: center !important; /* Opcional: centra los números para que se vea más ordenado */
+    text-align: start !important; /* Opcional: centra los números para que se vea más ordenado */
     }
 }
 
