@@ -5,29 +5,21 @@
 }
 
 body {
-    background: linear-gradient(135deg, #0a4ad4, #426fca, #ce1d1d, #e27777, #b34642);
-    background-size: 400% 400%;
-    animation: gradientAnimation 15s ease infinite;
     min-height: 100vh;
     font-family: 'Poppins', sans-serif;
     display: flex;
     flex-direction: column;
     color: #fff;
     position: relative;
+    background: linear-gradient(135deg, #3a8abb  , #304166  , #2a346d   , #0c1752   );
+    background-size: 400% 400%;
+    animation: gradientShift 12s ease infinite;
 }
 
-@keyframes gradientAnimation {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
+@keyframes gradientShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 body::before {
@@ -49,10 +41,11 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 15px 40px;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(185, 179, 179, 0.2);
     backdrop-filter: blur(5px);
     top: 0;
     z-index: 10;
+    border-bottom: 1.5px solid rgba(8, 7, 7, 0.6) ;
 }
 
 .logo img {
@@ -131,12 +124,12 @@ main {
 
 .login-container {
     display: flex;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 38, 255, 0.3);
     backdrop-filter: blur(15px);
-    border-radius: 20px;
+    border-radius: 1px;
     overflow: hidden;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 253, 253, 0.5);
     max-width: 900px;
     width: 100%;
 }
@@ -197,7 +190,7 @@ main {
     padding: 12px 15px 12px 45px;
     background: rgba(255, 255, 255, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 25px;
+    border-radius: 1px;
     color: white;
     font-size: 16px;
     outline: none;
@@ -225,7 +218,7 @@ main {
 }
 
 .login-btn:hover {
-    background: #170fb6;
+    background: #3b8aca;
 }
 
 .secondary-links {
