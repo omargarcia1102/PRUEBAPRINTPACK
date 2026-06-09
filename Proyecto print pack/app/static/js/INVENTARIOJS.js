@@ -186,18 +186,24 @@ async function cargarHistorial() {
     movimientos.forEach(m => {
         cuerpo.innerHTML += `
             <tr style="border-bottom:1px solid rgba(255,255,255,0.06);">
-                <td style="padding:10px; font-size:13px;">${convertirFecha(m.fecha)}</td>
-                <td style="padding:10px;">${m.nombre_producto}</td>
-                <td style="padding:10px;">
-                    <span style="background:${colores[m.tipo_movimiento]}; 
-                                 padding:3px 10px; border-radius:20px; 
-                                 font-size:12px; font-weight:600;">
-                        ${m.tipo_movimiento}
-                    </span>
+                <td style="padding:8px 6px; font-size:12px; white-space:nowrap;">
+                    ${convertirFecha(m.fecha)}
                 </td>
-                <td style="padding:10px;">${m.usuario}</td>
-                <td style="padding:10px; text-align:center;">${m.stock_anterior}</td>
-                <td style="padding:10px; text-align:center;">${m.stock_nuevo}</td>
+                <td style="padding:8px 6px; font-size:12px;">
+                ${m.nombre_producto}
+                </td>
+                <td style="padding:8px 6px;">
+                <span style="background:${colores[m.tipo_movimiento]}; 
+                            padding:2px 8px; border-radius:20px; 
+                            font-size:11px; font-weight:600;
+                            white-space:nowrap;">
+                    ${m.tipo_movimiento}
+                </span>
+                </td>
+                <td style="padding:8px 6px; font-size:12px;">${m.usuario}</td>
+                <td style="padding:8px 6px; font-size:12px; text-align:center;">
+                    ${m.stock_anterior} → ${m.stock_nuevo}
+                </td>
             </tr>
         `;
     });
