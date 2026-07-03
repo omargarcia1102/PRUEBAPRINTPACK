@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PrintPack Caribe - Contáctanos</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/CONTACTOCSS.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/CONTACTOCSS.css') }}">
 
 </head>
 <body>
@@ -34,14 +35,14 @@
 
     <main>
         <div id="contacto-section">
+            <span class="eyebrow" style="text-align:center; display:block;">Hablemos</span>
             <h2>Ponte en Contacto</h2>
-            
-            
 
+            <div class="contacto-grid">
                 <div class="contacto-info">
                     <h3>Nuestra Información</h3>
-                    <p style="margin-bottom: 30px; color: #bbb;">Estamos listos para asesorarlo en sus soluciones de empaques flexibles.</p>
-                    
+                    <p style="margin-bottom: 30px; color: var(--ink-soft);">Estamos listos para asesorarlo en sus soluciones de empaques flexibles.</p>
+
                     <div class="info-item">
                         <i class="fas fa-map-marker-alt"></i>
                         <div>
@@ -65,6 +66,17 @@
                             <p>Lunes a Viernes: 7:00 AM - 6:00 PM</p>
                         </div>
                     </div>
+
+                    <a href="mailto:julian.moncada327@gmail.com" class="btn-primary" style="margin-top: 10px;">Escríbenos <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <div class="contacto-map">
+                    <iframe
+                        src="https://www.google.com/maps?q=Av+5+%237N-129+Zona+Industrial,+C%C3%BAcuta,+Norte+de+Santander&output=embed"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
                 </div>
             </div>
         </div>
