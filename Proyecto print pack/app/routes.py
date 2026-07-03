@@ -27,7 +27,7 @@ def enviar_telegram(mensaje):
 
 def hora_colombia():
     from datetime import datetime
-    return (datetime.utcnow() + timedelta(hours=-4)).strftime('%d/%m/%Y, %I:%M:%S %p')
+    return (datetime.utcnow() + timedelta(hours=-5)).strftime('%d/%m/%Y, %I:%M:%S %p')
 
 
 def nivel_stock(stock):
@@ -37,7 +37,7 @@ def nivel_stock(stock):
             return "🔴 SIN STOCK"
         if s <= 50:
             return "🟡 STOCK BAJO"
-        return "🟢 STOCK OK"
+        return "🟢 STOCK ALTO"
     except:
         return "⚪ N/A"
 
@@ -275,7 +275,7 @@ def eliminar_producto(id):
         f"📍 <b>Bodega:</b> No disponible (eliminado)\n"
         f"⏰ <b>Hora:</b> {hora_colombia()}\n"
         f"━━━━━━━━━━━━━━━━━━━━\n"
-        f"🔴 PRODUCTO ELIMINADO DEL SISTEMA"
+        f"🔴 PRODUCTO FUERA DEL SISTEMA"
         )
     enviar_telegram(mensaje)
 
