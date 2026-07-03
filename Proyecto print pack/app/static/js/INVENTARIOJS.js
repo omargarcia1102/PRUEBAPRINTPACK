@@ -120,10 +120,14 @@ function actualizarTablaYSelects() {
     const cuerpo     = document.getElementById("cuerpo-tabla");
     const selectEdit = document.getElementById("select-editar-producto");
     const selectDel  = document.getElementById("select-eliminar-producto");
+    const statTotal    = document.getElementById("stat-total-productos");
+    const statUnidades = document.getElementById("stat-total-unidades");
 
     cuerpo.innerHTML     = "";
     selectEdit.innerHTML = '<option value="">-- Selecciona --</option>';
     selectDel.innerHTML  = '<option value="">-- Selecciona --</option>';
+
+    let unidadesTotales = 0;
 
     productos.forEach(p => {
         const precio = p.costo 
@@ -133,18 +137,30 @@ function actualizarTablaYSelects() {
                 minimumFractionDigits: 0
               }).format(p.costo)
             : 'No definido';
+
+        const stockNum = Number(p.stock) || 0;
+        unidadesTotales += stockNum;
+
+        let badgeClase = 'badge-ok';
+        let badgeTexto = 'En stock';
+        if (stockNum === 0) { badgeClase = 'badge-out'; badgeTexto = 'Agotado'; }
+        else if (stockNum <= 10) { badgeClase = 'badge-low'; badgeTexto = 'Stock bajo'; }
+
         cuerpo.innerHTML += `
             <tr>
-                <td style="padding:12px;">${p.nombre}</td>
-                <td style="padding:12px;">${p.codigo || '—'}</td>
-                <td style="padding:12px;">${p.stock} unidades</td>
-                <td style="padding:12px;">${precio}</td>
-                <td style="padding:12px;">${p.bodega}</td>
+                <td class="col-nombre">${p.nombre}</td>
+                <td>${p.codigo || '—'}</td>
+                <td><span class="badge ${badgeClase}">${badgeTexto} · ${stockNum}</span></td>
+                <td>${precio}</td>
+                <td>${p.bodega || '—'}</td>
             </tr>`;
         const opt = `<option value="${p.id}">${p.nombre} (${p.codigo})</option>`;
         selectEdit.innerHTML += opt;
         selectDel.innerHTML  += opt;
     });
+
+    if (statTotal) statTotal.textContent = productos.length;
+    if (statUnidades) statUnidades.textContent = unidadesTotales.toLocaleString('es-CO');
 }
 
 function mostrarSubSeccionInventario(tipo, elemento) {
@@ -169,7 +185,7 @@ async function confirmarEliminacion() {
             await cargarProductos();
         }
     }
-} // <-- CAMBIO: Aquí cerramos correctamente confirmarEliminacion
+}
 
 async function cargarHistorial() {
     const res = await fetch('/api/movimientos');
@@ -177,35 +193,21 @@ async function cargarHistorial() {
     const cuerpo = document.getElementById('cuerpo-historial');
     cuerpo.innerHTML = '';
 
-    const colores = {
-        'AGREGAR':  '#2ecc71',
-        'EDITAR':   '#f39c12',
-        'ELIMINAR': '#e74c3c'
+    const clases = {
+        'AGREGAR':  'badge-ok',
+        'EDITAR':   'badge-low',
+        'ELIMINAR': 'badge-out'
     };
 
     movimientos.forEach(m => {
         cuerpo.innerHTML += `
-            <tr style="border-bottom:1px solid rgba(255,255,255,0.06);">
-                <td style="padding:8px 6px; font-size:12px; white-space:nowrap;">
-                    ${convertirFecha(m.fecha)}
-                </td>
-                <td style="padding:8px 6px; font-size:12px;">
-                ${m.nombre_producto}
-                </td>
-                <td style="padding:8px 6px;">
-                <span style="background:${colores[m.tipo_movimiento]}; 
-                            padding:2px 8px; border-radius:20px; 
-                            font-size:11px; font-weight:600;
-                            white-space:nowrap;">
-                    ${m.tipo_movimiento}
-                </span>
-                </td>
-                <td style="padding:8px 6px; font-size:12px;">${m.usuario}</td>
-                <td style="padding:8px 6px; font-size:12px; text-align:start;">
-                    ${m.stock_anterior} → ${m.stock_nuevo}
-                </td>
+            <tr>
+                <td>${convertirFecha(m.fecha)}</td>
+                <td>${m.nombre_producto}</td>
+                <td><span class="badge ${clases[m.tipo_movimiento] || 'badge-low'}">${m.tipo_movimiento}</span></td>
+                <td>${m.usuario}</td>
+                <td>${m.stock_anterior} → ${m.stock_nuevo}</td>
             </tr>
         `;
     });
-}// <-- CAMBIO: Aquí cierra bien cargarHistorial solo
-
+}
