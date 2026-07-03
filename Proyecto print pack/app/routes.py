@@ -1,6 +1,45 @@
 import MySQLdb.cursors
 from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for
 from app import mysql
+import os
+import requests
+from datetime import timedelta
+
+
+def enviar_telegram(mensaje):
+    token = os.environ.get('TELEGRAM_TOKEN')
+    chat_id = os.environ.get('TELEGRAM_CHAT_ID')
+    if not token or not chat_id:
+        return
+    try:
+        requests.post(
+            f'https://api.telegram.org/bot{token}/sendMessage',
+            json={
+                'chat_id': chat_id,
+                'text': mensaje,
+                'parse_mode': 'HTML'
+            },
+            timeout=5
+        )
+    except Exception:
+        pass
+
+
+def hora_colombia():
+    from datetime import datetime
+    return (datetime.utcnow() + timedelta(hours=-4)).strftime('%d/%m/%Y, %I:%M:%S %p')
+
+
+def nivel_stock(stock):
+    try:
+        s = int(stock)
+        if s == 0:
+            return "🔴 SIN STOCK"
+        if s <= 50:
+            return "🟡 STOCK BAJO"
+        return "🟢 STOCK OK"
+    except:
+        return "⚪ N/A"
 
 main = Blueprint('main', __name__)
 
@@ -86,7 +125,7 @@ def get_productos():
 @main.route('/api/productos', methods=['POST'])
 def crear_producto():
     d = request.get_json()
-    cursor = mysql.connection.cursor()
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)()
     
     cursor.execute("""
         INSERT INTO productos 
@@ -118,6 +157,22 @@ def crear_producto():
         0,
         d.get('stock')
     ))
+    alerta = nivel_stock(d.get('stock'))
+    precio = f"${int(float(d.get('costo') or 0)):,}".replace(',', '.')
+    mensaje = (
+        f"🟢 <b>PRODUCTO AGREGADO</b>\n"
+        f"━━━━━━━━━━━━━━━━━━━━\n"
+        f"📦 <b>Producto:</b> {d.get('nombre')}\n"
+        f"👤 <b>Usuario:</b> {session.get('usuario')}\n"
+        f"🏷️ <b>Tipo movimiento:</b> AGREGAR\n"
+        f"📊 <b>Stock nuevo:</b> {d.get('stock')} unidades\n"
+        f"💰 <b>Precio:</b> {precio} COP\n"
+        f"📍 <b>Bodega:</b> {d.get('bodega') or 'No especificada'}\n"
+        f"⏰ <b>Hora:</b> {hora_colombia()}\n"
+        f"━━━━━━━━━━━━━━━━━━━━\n"
+        f"{alerta}"
+        )
+    enviar_telegram(mensaje)
 
     mysql.connection.commit()
     cursor.close()
@@ -160,6 +215,23 @@ def actualizar_producto(id):
         stock_anterior,
         d.get('stock')
     ))
+    alerta = nivel_stock(d.get('stock'))
+    precio = f"${int(float(d.get('costo') or 0)):,}".replace(',', '.')
+    mensaje = (
+        f"🟡 <b>PRODUCTO EDITADO</b>\n"
+        f"━━━━━━━━━━━━━━━━━━━━\n"
+        f"📦 <b>Producto:</b> {nombre_producto}\n"
+        f"👤 <b>Usuario:</b> {session.get('usuario')}\n"
+        f"🏷️ <b>Tipo movimiento:</b> EDITAR\n"
+        f"📊 <b>Stock anterior:</b> {stock_anterior} unidades\n"
+        f"📊 <b>Stock nuevo:</b> {d.get('stock')} unidades\n"
+        f"💰 <b>Precio:</b> {precio} COP\n"
+        f"📍 <b>Bodega:</b> {d.get('bodega') or 'No especificada'}\n"
+        f"⏰ <b>Hora:</b> {hora_colombia()}\n"
+        f"━━━━━━━━━━━━━━━━━━━━\n"
+        f"{alerta}"
+        )
+    enviar_telegram(mensaje)
 
     mysql.connection.commit()
     cursor.close()
@@ -192,6 +264,20 @@ def eliminar_producto(id):
 
     
     cursor.execute("DELETE FROM productos WHERE id=%s", (id,))
+    alerta = nivel_stock(0)
+    mensaje = (
+        f"🔴 <b>PRODUCTO ELIMINADO</b>\n"
+        f"━━━━━━━━━━━━━━━━━━━━\n"
+        f"📦 <b>Producto:</b> {nombre_producto}\n"
+        f"👤 <b>Usuario:</b> {session.get('usuario')}\n"
+        f"🏷️ <b>Tipo movimiento:</b> ELIMINAR\n"
+        f"📊 <b>Stock eliminado:</b> {stock_actual} unidades\n"
+        f"📍 <b>Bodega:</b> No disponible (eliminado)\n"
+        f"⏰ <b>Hora:</b> {hora_colombia()}\n"
+        f"━━━━━━━━━━━━━━━━━━━━\n"
+        f"🔴 PRODUCTO ELIMINADO DEL SISTEMA"
+        )
+    enviar_telegram(mensaje)
 
     mysql.connection.commit()
     cursor.close()
