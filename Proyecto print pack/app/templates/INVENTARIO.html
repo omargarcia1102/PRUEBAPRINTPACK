@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PrintPack Caribe - Inventario</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/INVENTARIOCSS.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/INVENTARIOCSS.css') }}">
 
-    
 </head>
 <body>
 
@@ -27,137 +27,156 @@
             <li><a href={{ url_for('main.inventario') }} class="active">Inventario</a></li>
         </ul>
     </nav>
-    <a href="{{ url_for('main.logout') }}" id="auth-button">Cerrar Sesión (Admin)</a>
+    <a href="{{ url_for('main.logout') }}" id="auth-button" class="btn-nav">Cerrar Sesión (Admin)</a>
 </header>
 
 <main>
     <section id="inventario-section">
-        <h2>Gestión de Inventario</h2>
+        <div class="inventario-layout">
 
-        <div class="admin-options">
-            <a href="#" class="option-active" onclick="mostrarSubSeccionInventario('agregar', this); return false;"><i class="fa-solid fa-plus-circle"></i> Agregar Producto</a>
-            <a href="#" onclick="mostrarSubSeccionInventario('editar', this); return false;"><i class="fa-solid fa-edit"></i> Editar Producto</a>
-            <a href="#" onclick="mostrarSubSeccionInventario('borrar', this); return false;"><i class="fa-solid fa-trash-alt"></i> Borrar Producto</a>
-            <a href="#" onclick="mostrarSubSeccionInventario('historial', this); return false;"><i class="fa-solid fa-history"></i> Historial</a>
-        </div>
+            <aside class="inventario-sidebar">
+                <span class="eyebrow">Panel administrativo</span>
+                <h2>Inventario</h2>
 
-        <div id="contenedor-tabla-stock" style="width: 100%; margin: 20px 0; overflow-x: auto;">
-    <table style="width: 100%; border-collapse: collapse; background: rgba(0,0,0,0.25); border-radius: 1px; overflow: hidden; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.05);">
-        <thead>
-            <tr style="background: rgba(255,255,255,0.1); text-align: left; color: #4F72E6;">
-                <th style="padding: 12px;">Producto</th>
-                <th style="padding: 12px;">Codigo / SKU</th>
-                <th style="padding: 12px;">Estado Stock</th>
-                <th style="padding: 12px;">Precio</th>
-                <th style="padding: 12px;">Ubicación</th>
-            </tr>
-        </thead>
-        <tbody id="cuerpo-tabla"></tbody>
-    </table>
-</div>
+                <div class="admin-options">
+                    <a href="#" class="option-active" onclick="mostrarSubSeccionInventario('agregar', this); return false;"><i class="fa-solid fa-plus-circle"></i> Agregar producto</a>
+                    <a href="#" onclick="mostrarSubSeccionInventario('editar', this); return false;"><i class="fa-solid fa-edit"></i> Editar producto</a>
+                    <a href="#" onclick="mostrarSubSeccionInventario('borrar', this); return false;"><i class="fa-solid fa-trash-alt"></i> Borrar producto</a>
+                    <a href="#" onclick="mostrarSubSeccionInventario('historial', this); return false;"><i class="fa-solid fa-history"></i> Historial</a>
+                </div>
+            </aside>
 
-        <div id="inventario-sub-content">
-            <div id="form-agregar" class="inventario-form active-form">
-                <h3>Añadir Nuevo Producto</h3>
-                <form>
-                    <input type="text" placeholder="Nombre del producto" required>
-                    <input type="text" placeholder="Código interno / SKU" required>
-                    <select required>
-                        <option value="">Tipo de producto</option>
-                        <option>Bolsa</option>
-                        <option>Película</option>
-                        <option>Laminado</option>
-                        <option>Etiqueta</option>
-                        <option>Rollo</option>
-                    </select>
-                    <select required>
-                        <option value="">Categoría / Proceso</option>
-                        <option>Extrusión</option>
-                        <option>Laminación</option>
-                        <option>Impresión</option>
-                        <option>Corte y Refile</option>
-                        <option>Sellado</option>
-                    </select>
-                    <input type="number" placeholder="Capas (1–7)" min="1" max="7">
-                    <input type="number" placeholder="Espesor (micras)" min="10">
-                    <input type="text" placeholder="Material base (Ej: BOPP, CPP, PE)">
-                    <input type="text" placeholder="Color / impresión">
-                    <input type="text" placeholder="Dimensiones (Ej: 50x70 cm)">
-                    <input type="number" placeholder="Peso unitario (kg)" step="0.01">
-                    <input type="number" placeholder="Cantidad inicial en stock" required>
-                    <select>
-                        <option value="">Unidad de medida</option>
-                        <option>kg</option>
-                        <option>unidades</option>
-                        <option>metros</option>
-                        <option>rollos</option>
-                    </select>
-                    <input type="text" placeholder="Ubicación / Bodega">
-                    <input type="text" placeholder="Proveedor o cliente asociado">
-                    <input type="number" placeholder="Costo unitario ($)" step="0.01">
-                    <input type="date" placeholder="Fecha de ingreso" required>
-                    <textarea placeholder="Notas o especificaciones técnicas" style="grid-column: span 2;"></textarea>
-                    <button type="submit" style="grid-column: span 2;">Guardar Producto</button>
-                </form>
+            <div class="inventario-main">
+
+                <div class="inventario-stats">
+                    <div class="stat-card">
+                        <span class="stat-lbl">Productos registrados</span>
+                        <span class="stat-val" id="stat-total-productos">0</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-lbl">Unidades totales en stock</span>
+                        <span class="stat-val" id="stat-total-unidades">0</span>
+                    </div>
+                </div>
+
+                <div id="contenedor-tabla-stock" class="tabla-wrap">
+                    <table class="tabla-stock">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Código / SKU</th>
+                                <th>Estado stock</th>
+                                <th>Precio</th>
+                                <th>Ubicación</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cuerpo-tabla"></tbody>
+                    </table>
+                </div>
+
+                <div id="inventario-sub-content">
+                    <div id="form-agregar" class="inventario-form active-form">
+                        <h3>Añadir nuevo producto</h3>
+                        <form>
+                            <input type="text" placeholder="Nombre del producto" required>
+                            <input type="text" placeholder="Código interno / SKU" required>
+                            <select required>
+                                <option value="">Tipo de producto</option>
+                                <option>Bolsa</option>
+                                <option>Película</option>
+                                <option>Laminado</option>
+                                <option>Etiqueta</option>
+                                <option>Rollo</option>
+                            </select>
+                            <select required>
+                                <option value="">Categoría / Proceso</option>
+                                <option>Extrusión</option>
+                                <option>Laminación</option>
+                                <option>Impresión</option>
+                                <option>Corte y Refile</option>
+                                <option>Sellado</option>
+                            </select>
+                            <input type="number" placeholder="Capas (1–7)" min="1" max="7">
+                            <input type="number" placeholder="Espesor (micras)" min="10">
+                            <input type="text" placeholder="Material base (Ej: BOPP, CPP, PE)">
+                            <input type="text" placeholder="Color / impresión">
+                            <input type="text" placeholder="Dimensiones (Ej: 50x70 cm)">
+                            <input type="number" placeholder="Peso unitario (kg)" step="0.01">
+                            <input type="number" placeholder="Cantidad inicial en stock" required>
+                            <select>
+                                <option value="">Unidad de medida</option>
+                                <option>kg</option>
+                                <option>unidades</option>
+                                <option>metros</option>
+                                <option>rollos</option>
+                            </select>
+                            <input type="text" placeholder="Ubicación / Bodega">
+                            <input type="text" placeholder="Proveedor o cliente asociado">
+                            <input type="number" placeholder="Costo unitario ($)" step="0.01">
+                            <input type="date" placeholder="Fecha de ingreso" required>
+                            <textarea placeholder="Notas o especificaciones técnicas" style="grid-column: span 2;"></textarea>
+                            <button type="submit" style="grid-column: span 2;">Guardar producto</button>
+                        </form>
+                    </div>
+
+                    <div id="form-editar" class="inventario-form">
+                        <h3>Editar producto existente</h3>
+                        <form>
+                            <label style="grid-column: span 2;">Selecciona un producto</label>
+                            <select id="select-editar-producto" required style="grid-column: span 2;">
+                                <option value="">-- Selecciona un producto --</option>
+                            </select>
+                            <input type="text" placeholder="Nombre del producto">
+                            <input type="text" placeholder="Código / ID interno">
+                            <select id="select-tipo-editar">
+                                <option value="">Tipo de producto</option>
+                                <option>Bolsa</option>
+                                <option>Película</option>
+                                <option>Laminado</option>
+                                <option>Etiqueta</option>
+                                <option>Rollo</option>
+                            </select>
+                            <input type="number" placeholder="Capas (1-7)">
+                            <input type="number" placeholder="Espesor (micras)">
+                            <input type="text" placeholder="Color / impresión">
+                            <input type="number" placeholder="Cantidad en stock">
+                            <input type="text" placeholder="Ubicación / Bodega">
+                            <input type="number" placeholder="Costo unitario ($)">
+                            <input type="date" placeholder="Fecha de modificación" required>
+                            <textarea placeholder="Notas adicionales" style="grid-column: span 2;"></textarea>
+                            <button type="submit" style="grid-column: span 2;">Actualizar producto</button>
+                        </form>
+                    </div>
+
+                    <div id="form-borrar" class="inventario-form">
+                        <h3>Eliminar producto</h3>
+                        <form>
+                            <select id="select-eliminar-producto" required style="grid-column: span 2;">
+                                <option value="">-- Selecciona un producto --</option>
+                            </select>
+                            <p class="aviso-danger" style="grid-column: span 2;">Advertencia: esta acción es permanente.</p>
+                            <button type="button" class="btn-delete" onclick="confirmarEliminacion()">Confirmar eliminación</button>
+                        </form>
+                    </div>
+
+                    <div id="form-historial" class="inventario-form">
+                        <h3>Historial de movimientos</h3>
+                        <table class="tabla-historial">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Producto</th>
+                                    <th>Acción</th>
+                                    <th>Usuario</th>
+                                    <th>Stock</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cuerpo-historial"></tbody>
+                        </table>
+                    </div>
+
+                </div>
             </div>
-
-            <div id="form-editar" class="inventario-form">
-                <h3>Editar Producto Existente</h3>
-                <form>
-                    <label style="grid-column: span 2;">Selecciona un producto</label>
-                    <select id="select-editar-producto" required style="grid-column: span 2;">
-                        <option value="">-- Selecciona un producto --</option>
-                    </select>
-                    <input type="text" placeholder="Nombre del producto">
-                    <input type="text" placeholder="Código / ID interno">
-                    <select id="select-tipo-editar">
-    <option value="">Tipo de producto</option>
-    <option>Bolsa</option>
-    <option>Película</option>
-    <option>Laminado</option>   <!-- faltaba -->
-    <option>Etiqueta</option>  <!-- faltaba -->
-    <option>Rollo</option>     <!-- faltaba -->
-</select>
-                    <input type="number" placeholder="Capas (1-7)">
-                    <input type="number" placeholder="Espesor (micras)">
-                    <input type="text" placeholder="Color / impresión">
-                    <input type="number" placeholder="Cantidad en stock">
-                    <input type="text" placeholder="Ubicación / Bodega">
-                    <input type="number" placeholder="Costo unitario ($)">
-                    <input type="date" placeholder="Fecha de modificación" required>
-                    <textarea placeholder="Notas adicionales" style="grid-column: span 2;"></textarea>
-                    <button type="submit" style="grid-column: span 2;">Actualizar Producto</button>
-                </form>
-            </div>
-
-            <div id="form-borrar" class="inventario-form">
-                <h3>Eliminar Producto</h3>
-                <form>
-                    <select id="select-eliminar-producto" required style="grid-column: span 2;">
-                        <option value="">-- Selecciona un producto --</option>
-                    </select>
-                    <p style="grid-column: span 2; color: #ffcccc;">**Advertencia:** Acción permanente.</p>
-                    <button type="button" class="btn-delete" onclick="confirmarEliminacion()">Confirmar Eliminación</button>
-                </form>
-            </div>
-
-            <div id="form-historial" class="inventario-form">
-                <h3>Historial de Movimientos</h3>
-                <table style="width:100%; border-collapse:collapse;">
-                    <thead>
-                        <tr style="background: rgba(255,255,255,0.1); text-align: left; color: #4F72E6;">
-                            <th style="padding:10px;">Fecha</th>
-                            <th style="padding:10px;">Producto</th>
-                            <th style="padding:10px;">Acción</th>
-                            <th style="padding:10px;">Usuario</th>
-                            <th style="padding:10px;">Stock</th>
-                        </tr>
-                    </thead>
-                    <tbody id="cuerpo-historial"></tbody>
-                </table>
-            </div>
-
-            
         </div>
     </section>
 </main>
