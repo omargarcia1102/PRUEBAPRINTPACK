@@ -125,7 +125,7 @@ def get_productos():
 @main.route('/api/productos', methods=['POST'])
 def crear_producto():
     d = request.get_json()
-    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)()
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     
     cursor.execute("""
         INSERT INTO productos 
