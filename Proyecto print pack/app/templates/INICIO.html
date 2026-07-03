@@ -6,9 +6,10 @@
     <title>PrintPack Caribe - Inicio</title>
 
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/INICIOCSS.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/INICIOCSS.css') }}">
 
 </head>
 <body>
@@ -34,17 +35,45 @@
     </header>
 
     <main>
-        <div id="home-section" class="home-section">
-            <div class="home-text">
-                <h1>PrintPack Caribe</h1>
-                <h2>Impulsando la Sostenibilidad con Plásticos Reciclados</h2>
-                <p>Ofrecemos soluciones efectivas en empaques flexibles, superando las expectativas de nuestros clientes y aliados con tecnología, personal capacitado y materias primas de alta calidad.</p>
-                <a href={{ url_for('main.productos') }} class="btn-primary">Ver Productos</a>
-            </div>
-            <div class="home-image">
-                <img src="https://printpackcaribe.com/wp-content/uploads/2025/08/ECOBOLSAS-CARIBE-PRINTPACK-LOGOS-4-scaled-324x141.png" alt="Logo">
+        <div id="home-section" class="hero-inicio">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <span class="eyebrow eyebrow-light">Empaques flexibles · Cúcuta</span>
+                <h1>Empaque que <span class="hl">protege</span> lo que importa</h1>
+                <p>Impulsamos la sostenibilidad con plásticos reciclados: soluciones en empaques flexibles con tecnología, personal capacitado y materias primas de alta calidad.</p>
+                <a href={{ url_for('main.productos') }} class="btn-primary">Ver productos</a>
             </div>
         </div>
+
+        <div class="stats-strip">
+            <div><span class="num">+15</span><span class="lbl">Años de experiencia</span></div>
+            <div><span class="num">1.500 t</span><span class="lbl">Producción mensual</span></div>
+            <div><span class="num">8</span><span class="lbl">Colores de impresión HD</span></div>
+            <div><span class="num">7</span><span class="lbl">Capas por estructura</span></div>
+        </div>
+
+        <section class="highlights">
+            <span class="eyebrow">Por qué elegirnos</span>
+            <h2>Cada empaque, respaldado por un proceso completo</h2>
+            <div class="highlights-grid">
+                <div class="highlight-card">
+                    <i class="fa-solid fa-flask"></i>
+                    <h3>Laboratorio propio</h3>
+                    <p>Medimos fricción, fugas y migración de oxígeno antes de que el producto salga de planta.</p>
+                </div>
+                <div class="highlight-card">
+                    <i class="fa-solid fa-recycle"></i>
+                    <h3>Materiales reciclados</h3>
+                    <p>Estructuras oxi-biodegradables y plásticos reciclados sin sacrificar resistencia.</p>
+                </div>
+                <div class="highlight-card">
+                    <i class="fa-solid fa-industry"></i>
+                    <h3>Capacidad industrial</h3>
+                    <p>70 líneas de extrusión y más de 1.500 toneladas mensuales de capacidad productiva.</p>
+                </div>
+            </div>
+            <a href={{ url_for('main.procesos') }} class="link-arrow">Conoce nuestros procesos <i class="fa-solid fa-arrow-right"></i></a>
+        </section>
     </main>
 
     <footer>
