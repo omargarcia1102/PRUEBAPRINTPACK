@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     };
 
-    // --- EDITAR ---
+    // --- EDITAR (CORREGIDO CON EL NUEVO INPUT DE MATERIAL) ---
     const formEditar  = document.querySelector("#form-editar form");
     const selectEditar = document.getElementById("select-editar-producto");
 
@@ -48,16 +48,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         const selects = formEditar.querySelectorAll('select:not(#select-editar-producto)');
         const textarea = formEditar.querySelector('textarea');
 
+        // Mapeo ajustado por la inserción de Material Base
         inputs[0].value  = p.nombre   || '';
         inputs[1].value  = p.codigo   || '';
         selects[0].value = p.tipo     || '';
         inputs[2].value  = p.capas    || '';
         inputs[3].value  = p.espesor  || '';
-        inputs[4].value  = p.color    || '';
-        inputs[5].value  = p.stock    || '';
-        inputs[6].value  = p.bodega   || '';
-        inputs[7].value  = p.costo    || '';
-        inputs[8].value  = p.fecha_ingreso || '';
+        inputs[4].value  = p.material || ''; // <-- NUEVO: Ahora sí muestra el Material Base aquí
+        inputs[5].value  = p.color    || ''; // Movido al índice 5
+        inputs[6].value  = p.stock    || ''; // Movido al índice 6
+        inputs[7].value  = p.bodega   || ''; // Movido al índice 7
+        inputs[8].value  = p.costo    || ''; // Movido al índice 8
+        inputs[9].value  = p.fecha_ingreso || p.fecha || ''; // Movido al índice 9
         textarea.value   = p.notas    || '';
     };
 
@@ -70,13 +72,20 @@ document.addEventListener("DOMContentLoaded", async () => {
         const selects = formEditar.querySelectorAll('select:not(#select-editar-producto)');
         const textarea = formEditar.querySelector('textarea');
 
+        // Recolección de datos ajustada con los nuevos índices +1
         const actualizado = {
-            nombre:  inputs[0].value,  codigo:  inputs[1].value,
-            tipo:    selects[0].value, capas:   inputs[2].value,
-            espesor: inputs[3].value,  color:   inputs[4].value,
-            stock:   inputs[5].value,  bodega:  inputs[6].value,
-            costo:   inputs[7].value,  fecha:   inputs[8].value,
-            notas:   textarea.value
+            nombre:   inputs[0].value,  
+            codigo:   inputs[1].value,
+            tipo:     selects[0].value, 
+            capas:    inputs[2].value,
+            espesor:  inputs[3].value,  
+            material: inputs[4].value, // <-- NUEVO: Envía el material modificado
+            color:    inputs[5].value,  
+            stock:    inputs[6].value,  
+            bodega:   inputs[7].value,  
+            costo:    inputs[8].value,  
+            fecha:    inputs[9].value,
+            notas:    textarea.value
         };
 
         const res = await fetch(`/api/productos/${id}`, {
