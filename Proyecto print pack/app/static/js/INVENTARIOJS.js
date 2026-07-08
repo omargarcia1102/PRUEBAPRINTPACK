@@ -178,7 +178,8 @@ function mostrarSubSeccionInventario(tipo, elemento) {
     document.querySelectorAll('.inventario-form').forEach(f => f.classList.remove('active-form'));
     document.getElementById(`form-${tipo}`).classList.add('active-form');
 
-     if (tipo === 'historial') cargarHistorial();
+    if (tipo === 'historial') cargarHistorial();
+    if (tipo === 'ver-productos') dibujarCatalogoCompleto();
 }
 
 async function confirmarEliminacion() {
@@ -219,4 +220,47 @@ async function cargarHistorial() {
             </tr>
         `;
     });
+function dibujarCatalogoCompleto() {
+    const grid = document.getElementById("grid-productos-completo");
+    if (!grid) return;
+    
+    grid.innerHTML = ""; // Limpiar antes de renderizar
+
+    if (productos.length === 0) {
+        grid.innerHTML = `<p class="aviso-vacio">No hay productos registrados en el inventario.</p>`;
+        return;
+    }
+
+    productos.forEach(p => {
+        // Formatear el precio a pesos colombianos
+        const precioFormateado = p.costo 
+            ? new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(p.costo)
+            : 'No definido';
+
+        grid.innerHTML += `
+            <div class="tarjeta-tecnica">
+                <div class="tarjeta-tecnica-header">
+                    <h4>${p.nombre}</h4>
+                    <span class="codigo-tag">${p.codigo || 'SIN CÓDIGO'}</span>
+                </div>
+                <div class="tarjeta-tecnica-body">
+                    <div class="dato-tecnico"><strong>Tipo:</strong> <span>${p.tipo || '—'}</span></div>
+                    <div class="dato-tecnico"><strong>Estructura:</strong> <span>${p.capas ? p.capas + ' Capas' : '—'}</span></div>
+                    <div class="dato-tecnico"><strong>Espesor:</strong> <span>${p.espesor ? p.espesor + ' µm' : '—'}</span></div>
+                    <div class="dato-tecnico"><strong>Material Base:</strong> <span>${p.material || '—'}</span></div>
+                    <div class="dato-tecnico"><strong>Pigmento/Color:</strong> <span>${p.color || '—'}</span></div>
+                    <div class="dato-tecnico"><strong>Ubicación:</strong> <span>${p.bodega || '—'}</span></div>
+                    <div class="dato-tecnico"><strong>Costo Promedio:</strong> <span>${precioFormateado}</span></div>
+                </div>
+                <div class="tarjeta-tecnica-footer">
+                    <span>Stock Actual: <strong>${p.stock} unds</strong></span>
+                </div>
+            </div>
+        `;
+    });
+}
+
+
+
+
 }
