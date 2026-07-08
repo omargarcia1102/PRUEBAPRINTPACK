@@ -99,7 +99,7 @@
                                 <option>Sellado</option>
                             </select>
                             
-                            <input type="number" placeholder="Capas (1–7)" min="1" max="7">
+                            <input type="number" placeholder="Capas (1–7)" min="1" max="7" list="lista-capas">
                             <input type="number" placeholder="Espesor (micras)" min="10">
                             
                             <input type="text" placeholder="Material base (Ej: BOPP, CPP, PE)" list="lista-materiales">
@@ -147,7 +147,7 @@
                                 <option>Rollo</option>
                             </select>
                             
-                            <input type="number" placeholder="Capas (1-7)" min="1" max="7">
+                            <input type="number" placeholder="Capas (1-7)" min="1" max="7" list="lista-capas">
                             <input type="number" placeholder="Espesor (micras)" min="10">
                             <input type="text" placeholder="Material base" list="lista-materiales">
                             <input type="text" placeholder="Color / impresión" list="lista-colores">
@@ -190,6 +190,16 @@
 
                 </div>
 
+                <datalist id="lista-capas">
+                    <option value="1">1 Capa (Monocapa)</option>
+                    <option value="2">2 Capas (Bicapa)</option>
+                    <option value="3">3 Capas (Tricapa)</option>
+                    <option value="4">4 Capas</option>
+                    <option value="5">5 Capas</option>
+                    <option value="6">6 Capas</option>
+                    <option value="7">7 Capas (Barrera Alta)</option>
+                </datalist>
+
                 <datalist id="lista-materiales">
                     <option value="BOPP (Polipropileno Biorientado)">
                     <option value="CPP (Polipropileno Cast)">
@@ -221,6 +231,8 @@
                     <option value="Plásticos Nacionales">
                     <option value="Cliente Genérico - Mostrador">
                 </datalist>
+
+                
 
                     <div id="form-historial" class="inventario-form">
                         <h3>Historial de movimientos</h3>
