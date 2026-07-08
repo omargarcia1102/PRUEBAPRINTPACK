@@ -183,26 +183,25 @@ def actualizar_producto(id):
     d = request.get_json()
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
-  
     cursor.execute("SELECT nombre, stock FROM productos WHERE id=%s", (id,))
     producto_actual = cursor.fetchone()
     stock_anterior = producto_actual['stock'] if producto_actual else 0
     nombre_producto = producto_actual['nombre'] if producto_actual else ''
 
+    # CORREGIDO: Se añadió 'material=%s' en el SQL y 'd.get('material')' en los parámetros
     cursor.execute("""
         UPDATE productos SET
         nombre=%s, codigo=%s, tipo=%s, capas=%s,
-        espesor=%s, color=%s, stock=%s, bodega=%s,
+        espesor=%s, material=%s, color=%s, stock=%s, bodega=%s,
         costo=%s, fecha_ingreso=%s, notas=%s
         WHERE id=%s
     """, (
         d.get('nombre'), d.get('codigo'), d.get('tipo'),
-        d.get('capas'), d.get('espesor'), d.get('color'),
+        d.get('capas'), d.get('espesor'), d.get('material'), d.get('color'),
         d.get('stock'), d.get('bodega'), d.get('costo'),
         d.get('fecha'), d.get('notas'), id
     ))
 
-   
     cursor.execute("""
         INSERT INTO movimientos 
         (id_producto, nombre_producto, tipo_movimiento, usuario, detalle, stock_anterior, stock_nuevo)
@@ -215,6 +214,7 @@ def actualizar_producto(id):
         stock_anterior,
         d.get('stock')
     ))
+    
     alerta = nivel_stock(d.get('stock'))
     precio = f"${int(float(d.get('costo') or 0)):,}".replace(',', '.')
     mensaje = (
