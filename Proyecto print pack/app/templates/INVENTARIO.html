@@ -80,6 +80,7 @@
                         <form>
                             <input type="text" placeholder="Nombre del producto" required>
                             <input type="text" placeholder="Código interno / SKU" required>
+                            
                             <select required>
                                 <option value="">Tipo de producto</option>
                                 <option>Bolsa</option>
@@ -88,6 +89,7 @@
                                 <option>Etiqueta</option>
                                 <option>Rollo</option>
                             </select>
+                            
                             <select required>
                                 <option value="">Categoría / Proceso</option>
                                 <option>Extrusión</option>
@@ -96,13 +98,17 @@
                                 <option>Corte y Refile</option>
                                 <option>Sellado</option>
                             </select>
+                            
                             <input type="number" placeholder="Capas (1–7)" min="1" max="7">
                             <input type="number" placeholder="Espesor (micras)" min="10">
-                            <input type="text" placeholder="Material base (Ej: BOPP, CPP, PE)">
-                            <input type="text" placeholder="Color / impresión">
+                            
+                            <input type="text" placeholder="Material base (Ej: BOPP, CPP, PE)" list="lista-materiales">
+                            <input type="text" placeholder="Color / impresión" list="lista-colores">
                             <input type="text" placeholder="Dimensiones (Ej: 50x70 cm)">
-                            <input type="number" placeholder="Peso unitario (kg)" step="0.01">
-                            <input type="number" placeholder="Cantidad inicial en stock" required>
+                            <input type="number" placeholder="Peso unitario (kg)" min="0" step="0.01">
+                            
+                            <input type="number" placeholder="Cantidad inicial en stock" min="0" required>
+                            
                             <select>
                                 <option value="">Unidad de medida</option>
                                 <option>kg</option>
@@ -110,10 +116,13 @@
                                 <option>metros</option>
                                 <option>rollos</option>
                             </select>
-                            <input type="text" placeholder="Ubicación / Bodega">
-                            <input type="text" placeholder="Proveedor o cliente asociado">
-                            <input type="number" placeholder="Costo unitario ($)" step="0.01">
+                            
+                            <input type="text" placeholder="Ubicación / Bodega" list="lista-bodegas">
+                            <input type="text" placeholder="Proveedor o cliente asociado" list="lista-proveedores">
+                            
+                            <input type="number" placeholder="Costo unitario ($)" min="0" step="0.01">
                             <input type="date" placeholder="Fecha de ingreso" required>
+                            
                             <textarea placeholder="Notas o especificaciones técnicas" style="grid-column: span 2;"></textarea>
                             <button type="submit" style="grid-column: span 2;">Guardar producto</button>
                         </form>
@@ -128,6 +137,7 @@
                             </select>
                             <input type="text" placeholder="Nombre del producto">
                             <input type="text" placeholder="Código / ID interno">
+                            
                             <select id="select-tipo-editar">
                                 <option value="">Tipo de producto</option>
                                 <option>Bolsa</option>
@@ -136,13 +146,16 @@
                                 <option>Etiqueta</option>
                                 <option>Rollo</option>
                             </select>
-                            <input type="number" placeholder="Capas (1-7)">
-                            <input type="number" placeholder="Espesor (micras)">
-                            <input type="text" placeholder="Color / impresión">
-                            <input type="number" placeholder="Cantidad en stock">
-                            <input type="text" placeholder="Ubicación / Bodega">
-                            <input type="number" placeholder="Costo unitario ($)">
+                            
+                            <input type="number" placeholder="Capas (1-7)" min="1" max="7">
+                            <input type="number" placeholder="Espesor (micras)" min="10">
+                            <input type="text" placeholder="Material base" list="lista-materiales">
+                            <input type="text" placeholder="Color / impresión" list="lista-colores">
+                            <input type="number" placeholder="Cantidad en stock" min="0">
+                            <input type="text" placeholder="Ubicación / Bodega" list="lista-bodegas">
+                            <input type="number" placeholder="Costo unitario ($)" min="0" step="0.01">
                             <input type="date" placeholder="Fecha de modificación" required>
+                            
                             <textarea placeholder="Notas adicionales" style="grid-column: span 2;"></textarea>
                             <button type="submit" style="grid-column: span 2;">Actualizar producto</button>
                         </form>
@@ -158,6 +171,56 @@
                             <button type="button" class="btn-delete" onclick="confirmarEliminacion()">Confirmar eliminación</button>
                         </form>
                     </div>
+
+                    <div id="form-historial" class="inventario-form">
+                        <h3>Historial de movimientos</h3>
+                        <table class="tabla-historial">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Producto</th>
+                                    <th>Acción</th>
+                                    <th>Usuario</th>
+                                    <th>Stock</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cuerpo-historial"></tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <datalist id="lista-materiales">
+                    <option value="BOPP (Polipropileno Biorientado)">
+                    <option value="CPP (Polipropileno Cast)">
+                    <option value="PEBD (Polietileno de Baja Densidad)">
+                    <option value="PEAD (Polietileno de Alta Densidad)">
+                    <option value="PET (Poliéster)">
+                    <option value="PVC (Policloruro de Vinilo)">
+                </datalist>
+
+                <datalist id="lista-colores">
+                    <option value="Transparente / Sin impresión">
+                    <option value="Blanco / Sin impresión">
+                    <option value="Pigmentado">
+                    <option value="Impresión 1 Color">
+                    <option value="Impresión 2 Colores">
+                    <option value="Impresión Policromía (Full Color)">
+                </datalist>
+
+                <datalist id="lista-bodegas">
+                    <option value="Bodega Principal - Cúcuta">
+                    <option value="Almacén de Materia Prima">
+                    <option value="Área de Producto Terminado">
+                    <option value="Silo de Despachos">
+                </datalist>
+
+                <datalist id="lista-proveedores">
+                    <option value="Flexo Empaques del Caribe">
+                    <option value="Distribuidora de Polímeros S.A.">
+                    <option value="Plásticos Nacionales">
+                    <option value="Cliente Genérico - Mostrador">
+                </datalist>
 
                     <div id="form-historial" class="inventario-form">
                         <h3>Historial de movimientos</h3>
