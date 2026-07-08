@@ -54,12 +54,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         selects[0].value = p.tipo     || '';
         inputs[2].value  = p.capas    || '';
         inputs[3].value  = p.espesor  || '';
-        inputs[4].value  = p.material || ''; // <-- NUEVO: Ahora sí muestra el Material Base aquí
-        inputs[5].value  = p.color    || ''; // Movido al índice 5
-        inputs[6].value  = p.stock    || ''; // Movido al índice 6
-        inputs[7].value  = p.bodega   || ''; // Movido al índice 7
-        inputs[8].value  = p.costo    || ''; // Movido al índice 8
-        inputs[9].value  = p.fecha_ingreso || p.fecha || ''; // Movido al índice 9
+        inputs[4].value  = p.material || ''; 
+        inputs[5].value  = p.color    || ''; 
+        inputs[6].value  = p.stock    || ''; 
+        inputs[7].value  = p.bodega   || ''; 
+        inputs[8].value  = p.costo    || ''; 
+        inputs[9].value  = p.fecha_ingreso || p.fecha || ''; 
         textarea.value   = p.notas    || '';
     };
 
@@ -72,14 +72,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         const selects = formEditar.querySelectorAll('select:not(#select-editar-producto)');
         const textarea = formEditar.querySelector('textarea');
 
-        // Recolección de datos ajustada con los nuevos índices +1
         const actualizado = {
             nombre:   inputs[0].value,  
             codigo:   inputs[1].value,
             tipo:     selects[0].value, 
             capas:    inputs[2].value,
             espesor:  inputs[3].value,  
-            material: inputs[4].value, // <-- NUEVO: Envía el material modificado
+            material: inputs[4].value, 
             color:    inputs[5].value,  
             stock:    inputs[6].value,  
             bodega:   inputs[7].value,  
@@ -220,11 +219,13 @@ async function cargarHistorial() {
             </tr>
         `;
     });
+} // <-- CORREGIDO: Aquí se cierra correctamente cargarHistorial
+
 function dibujarCatalogoCompleto() {
     const grid = document.getElementById("grid-productos-completo");
     if (!grid) return;
     
-    grid.innerHTML = ""; // Limpiar antes de renderizar
+    grid.innerHTML = ""; 
 
     if (productos.length === 0) {
         grid.innerHTML = `<p class="aviso-vacio">No hay productos registrados en el inventario.</p>`;
@@ -232,7 +233,6 @@ function dibujarCatalogoCompleto() {
     }
 
     productos.forEach(p => {
-        // Formatear el precio a pesos colombianos
         const precioFormateado = p.costo 
             ? new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(p.costo)
             : 'No definido';
@@ -258,9 +258,4 @@ function dibujarCatalogoCompleto() {
             </div>
         `;
     });
-}
-
-
-
-
 }
