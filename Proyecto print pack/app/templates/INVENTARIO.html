@@ -42,6 +42,7 @@
                     <a href="#" class="option-active" onclick="mostrarSubSeccionInventario('agregar', this); return false;"><i class="fa-solid fa-plus-circle"></i> Agregar producto</a>
                     <a href="#" onclick="mostrarSubSeccionInventario('editar', this); return false;"><i class="fa-solid fa-edit"></i> Editar producto</a>
                     <a href="#" onclick="mostrarSubSeccionInventario('borrar', this); return false;"><i class="fa-solid fa-trash-alt"></i> Borrar producto</a>
+                    <a href="#" onclick="mostrarSubSeccionInventario('ver-productos', this)"><i class="fas fa-boxes-stacked"></i> Ver Catálogo</a>
                     <a href="#" onclick="mostrarSubSeccionInventario('historial', this); return false;"><i class="fa-solid fa-history"></i> Historial</a>
                 </div>
             </aside>
@@ -170,6 +171,14 @@
                             <p class="aviso-danger" style="grid-column: span 2;">Advertencia: esta acción es permanente.</p>
                             <button type="button" class="btn-delete" onclick="confirmarEliminacion()">Confirmar eliminación</button>
                         </form>
+                    </div>
+
+                    <div id="form-ver-productos" class="inventario-form">
+                        <div class="header-seccion">
+                            <h3>Catálogo Técnico de Productos</h3>
+                            <p>Visualización detallada de materiales y especificaciones de coextrusión.</p>
+                        </div>
+                        <div id="grid-productos-completo" class="grid-productos-tecnicos"></div>
                     </div>
 
                     <div id="form-historial" class="inventario-form">
