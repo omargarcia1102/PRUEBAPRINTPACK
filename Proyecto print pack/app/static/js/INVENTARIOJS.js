@@ -9,18 +9,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         e.preventDefault();
         const inputs  = formAgregar.querySelectorAll('input');
         const selects = formAgregar.querySelectorAll('select');
-        const textarea = formAgregar.querySelector('textarea');
 
         const nuevo = {
             nombre: inputs[0].value,   codigo:   inputs[1].value,
-            tipo:   selects[0].value,  categoria: selects[1].value,
-            capas:  inputs[2].value,   espesor:  inputs[3].value,
-            material: inputs[4].value, color:    inputs[5].value,
-            dimensiones: inputs[6].value, peso:  inputs[7].value,
-            stock:  inputs[8].value,   unidad:   selects[2].value,
-            bodega: inputs[9].value,   proveedor: inputs[10].value,
-            costo:  inputs[11].value,  fecha:    inputs[12].value,
-            notas:  textarea.value
+            tipo:   selects[0].value,  material: inputs[2].value,
+            capas:  inputs[3].value,   espesor:  inputs[4].value,
+            color:  inputs[5].value,
+            stock:  inputs[6].value,   unidad:   selects[1].value,
+            bodega: inputs[7].value,   costo:    inputs[8].value,
+            fecha:  inputs[9].value
         };
 
         const res = await fetch('/api/productos', {
@@ -36,7 +33,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     };
 
-    // --- EDITAR (CORREGIDO CON EL NUEVO INPUT DE MATERIAL) ---
+    // --- EDITAR ---
     const formEditar  = document.querySelector("#form-editar form");
     const selectEditar = document.getElementById("select-editar-producto");
 
@@ -46,21 +43,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         const p = productos.find(x => x.id == id);
         const inputs  = formEditar.querySelectorAll('input');
         const selects = formEditar.querySelectorAll('select:not(#select-editar-producto)');
-        const textarea = formEditar.querySelector('textarea');
 
-        // Mapeo ajustado por la inserción de Material Base
         inputs[0].value  = p.nombre   || '';
         inputs[1].value  = p.codigo   || '';
         selects[0].value = p.tipo     || '';
-        inputs[2].value  = p.capas    || '';
-        inputs[3].value  = p.espesor  || '';
-        inputs[4].value  = p.material || ''; 
-        inputs[5].value  = p.color    || ''; 
-        inputs[6].value  = p.stock    || ''; 
-        inputs[7].value  = p.bodega   || ''; 
-        inputs[8].value  = p.costo    || ''; 
-        inputs[9].value  = p.fecha_ingreso || p.fecha || ''; 
-        textarea.value   = p.notas    || '';
+        inputs[2].value  = p.material || '';
+        inputs[3].value  = p.capas    || '';
+        inputs[4].value  = p.espesor  || '';
+        inputs[5].value  = p.color    || '';
+        inputs[6].value  = p.stock    || '';
+        inputs[7].value  = p.bodega   || '';
+        inputs[8].value  = p.costo    || '';
+        inputs[9].value  = p.fecha_ingreso || p.fecha || '';
     };
 
     formEditar.onsubmit = async (e) => {
@@ -70,21 +64,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const inputs  = formEditar.querySelectorAll('input');
         const selects = formEditar.querySelectorAll('select:not(#select-editar-producto)');
-        const textarea = formEditar.querySelector('textarea');
 
         const actualizado = {
-            nombre:   inputs[0].value,  
+            nombre:   inputs[0].value,
             codigo:   inputs[1].value,
-            tipo:     selects[0].value, 
-            capas:    inputs[2].value,
-            espesor:  inputs[3].value,  
-            material: inputs[4].value, 
-            color:    inputs[5].value,  
-            stock:    inputs[6].value,  
-            bodega:   inputs[7].value,  
-            costo:    inputs[8].value,  
-            fecha:    inputs[9].value,
-            notas:    textarea.value
+            tipo:     selects[0].value,
+            material: inputs[2].value,
+            capas:    inputs[3].value,
+            espesor:  inputs[4].value,
+            color:    inputs[5].value,
+            stock:    inputs[6].value,
+            bodega:   inputs[7].value,
+            costo:    inputs[8].value,
+            fecha:    inputs[9].value
         };
 
         const res = await fetch(`/api/productos/${id}`, {
