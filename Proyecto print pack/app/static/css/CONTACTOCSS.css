@@ -80,6 +80,11 @@ main{
     color: #fff;
 }
 
+.info-item .fa-whatsapp{
+    background: #25D366;
+    color: #fff;
+}
+
 .info-item strong{
     display: block;
     color: var(--ink);
@@ -117,6 +122,19 @@ main{
 
 .btn-instagram:hover{
     filter: brightness(1.06);
+    transform: translateY(-2px);
+}
+
+.btn-whatsapp{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #25D366;
+    box-shadow: 0 6px 16px rgba(37,211,102,0.32);
+}
+
+.btn-whatsapp:hover{
+    background: #1ebe5a;
     transform: translateY(-2px);
 }
 
