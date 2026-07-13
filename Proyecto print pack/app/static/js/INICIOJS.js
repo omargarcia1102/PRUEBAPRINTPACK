@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const authButton     = document.getElementById("auth-button");
     const inventarioLink = document.getElementById("inventario-link");
 
-    // Consulta al servidor si hay sesión activa
+    // Consulta si hay sesion activa
     const res    = await fetch('/api/sesion');
     const sesion = await res.json();
 
@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Mostrar enlace de inventario
         if (inventarioLink) inventarioLink.style.display = "list-item";
 
-        // Cambiar botón a "Cerrar Sesión"
+        // Cambiar boton a Cerrar Sesion
         if (authButton) {
             authButton.textContent = "Cerrar Sesión (Admin)";
             authButton.href = "/logout";
