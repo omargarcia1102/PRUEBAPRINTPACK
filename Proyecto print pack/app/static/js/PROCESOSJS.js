@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const authButton     = document.getElementById("auth-button");
     const inventarioLink = document.getElementById("inventario-link");
 
-    // Consulta al servidor si hay sesión activa
+    // Consulta si hay sesión activa
     const res    = await fetch('/api/sesion');
     const sesion = await res.json();
 
