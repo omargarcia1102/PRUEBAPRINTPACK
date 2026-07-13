@@ -43,7 +43,7 @@ def nivel_stock(stock):
 
 main = Blueprint('main', __name__)
 
-# --- PÁGINAS ---
+# PAGINAS 
 
 
 @main.route('/')
@@ -78,7 +78,7 @@ def contacto():
     return render_template('CONTACTO.html')
 
 
-# --- LOGIN REAL ---
+# LOGIN 
 @main.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -101,7 +101,7 @@ def login():
         return jsonify({'ok': False, 'mensaje': 'Credenciales incorrectas'}), 401
 
 
-# --- LOGOUT ---
+# LOGOUT
 @main.route('/logout')
 def logout():
     session.pop('usuario', None)
@@ -111,7 +111,7 @@ def logout():
     response.delete_cookie('session', path='/')
     return response
 
-# --- INVENTARIO CRUD REAL ---
+# INVENTARIO CRUD 
 
 @main.route('/api/productos', methods=['GET'])
 def get_productos():
@@ -142,7 +142,7 @@ def crear_producto():
         d.get('fecha'), d.get('notas')
     ))
     
-    id_nuevo = cursor.lastrowid  # ID del producto recién creado
+    id_nuevo = cursor.lastrowid  
 
    
     cursor.execute("""
@@ -188,7 +188,7 @@ def actualizar_producto(id):
     stock_anterior = producto_actual['stock'] if producto_actual else 0
     nombre_producto = producto_actual['nombre'] if producto_actual else ''
 
-    # CORREGIDO: Se añadió 'material=%s' en el SQL y 'd.get('material')' en los parámetros
+    
     cursor.execute("""
         UPDATE productos SET
         nombre=%s, codigo=%s, tipo=%s, capas=%s,
