@@ -1,7 +1,7 @@
 import os
 
 class Config:
-    # Estas líneas le dicen a Python: "Busca este dato en Render"
+    # Buscar datos en render
     MYSQL_HOST = os.getenv("DB_HOST")
     MYSQL_PORT = int(os.getenv("DB_PORT", 28731))
     MYSQL_USER = os.getenv("DB_USER")
@@ -10,7 +10,7 @@ class Config:
     
     SECRET_KEY = os.getenv("SECRET_KEY")
     
-    # Esta línea es la más importante para que funcione con Aiven
+    # Lineas para que aiven funcione
     MYSQL_CUSTOM_OPTIONS = {"ssl": {"ca": "ca.pem"}}
     SESSION_PERMANENT = False
     SESSION_COOKIE_SAMESITE = 'Lax'
