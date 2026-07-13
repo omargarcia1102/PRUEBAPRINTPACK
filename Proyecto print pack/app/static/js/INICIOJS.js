@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             authButton.href = "/logout";
         }
     } else {
-        // Sin sesión, botón normal
+        //  Sin sesion
         if (authButton) {
             authButton.textContent = "Acceder";
             authButton.href = "/acceder";
