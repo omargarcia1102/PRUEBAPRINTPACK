@@ -10,13 +10,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Mostrar enlace de inventario
         if (inventarioLink) inventarioLink.style.display = "list-item";
 
-        // Cambiar botón a "Cerrar Sesión"
+        // Cambiar boton a Cerrar Sesion
         if (authButton) {
             authButton.textContent = "Cerrar Sesión (Admin)";
             authButton.href = "/logout";
         }
     } else {
-        // Sin sesión, botón normal
+        // Sin sesion
         if (authButton) {
             authButton.textContent = "Acceder";
             authButton.href = "/acceder";
