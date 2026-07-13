@@ -14,7 +14,7 @@ main{
     align-items: start;
 }
 
-/* ---------- SIDEBAR ---------- */
+
 .inventario-sidebar{
     background: var(--bg);
     border: 1px solid var(--line);
