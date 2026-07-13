@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Cargar productos desde la BD
     await cargarProductos();
 
-    // --- AGREGAR ---
+    // AGREGAR
     const formAgregar = document.querySelector("#form-agregar form");
     formAgregar.onsubmit = async (e) => {
         e.preventDefault();
@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     };
 
-    // --- EDITAR ---
+    // EDITAR
     const formEditar  = document.querySelector("#form-editar form");
     const selectEditar = document.getElementById("select-editar-producto");
 
@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
 });
 
-// --- VARIABLES Y FUNCIONES GLOBALES ---
+// VARIABLES Y FUNCIONES GLOBALES
 let productos = [];
 
 async function cargarProductos() {
@@ -211,7 +211,7 @@ async function cargarHistorial() {
             </tr>
         `;
     });
-} // <-- CORREGIDO: Aquí se cierra correctamente cargarHistorial
+} 
 
 function dibujarCatalogoCompleto() {
     const grid = document.getElementById("grid-productos-completo");
