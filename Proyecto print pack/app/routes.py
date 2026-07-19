@@ -503,3 +503,67 @@ def get_venta_detalle(id):
         venta['fecha'] = venta['fecha'].strftime('%Y-%m-%d %H:%M:%S')
 
     return jsonify({'venta': venta, 'detalle': detalle})
+
+# 1. RUTA PARA VER LA PÁGINA WEB
+@app.route('/historial-ventas')
+def vista_historial_ventas():
+    return render_template('HISTORIAL_VENTAS.html')
+
+
+# 2. API EN PUNTO GET: TRAER TODAS LAS VENTAS
+@app.route('/api/ventas', methods=['GET'])
+def obtener_todas_las_ventas():
+    try:
+        conexion = obtener_conexion() # Usa tu función real de conexión a Aiven
+        with conexion.cursor(dictionary=True) as cursor:
+            # Traemos las ventas haciendo un JOIN con clientes para ver el nombre real
+            query = """
+                SELECT v.id, v.fecha, v.total, v.notas, c.nombre AS nombre_cliente 
+                FROM ventas v
+                JOIN clientes c ON v.id_cliente = c.id
+                ORDER BY v.fecha DESC
+            """
+            cursor.execute(query)
+            ventas = cursor.fetchall()
+        conexion.close()
+        return jsonify(ventas), 200
+    except Exception as e:
+        return jsonify({"ok": False, "mensaje": str(e)}), 500
+
+
+# 3. API EN PUNTO GET: TRAER EL DETALLE DE UNA FACTURA ESPECÍFICA
+@app.route('/api/ventas/<int:id_venta>', methods=['GET'])
+def obtener_detalle_factura(id_venta):
+    try:
+        conexion = obtener_conexion()
+        with conexion.cursor(dictionary=True) as cursor:
+            # 1. Obtener la cabecera de la venta
+            query_venta = """
+                SELECT v.id, v.fecha, v.total, c.nombre AS nombre_cliente 
+                FROM ventas v
+                JOIN clientes c ON v.id_cliente = c.id
+                WHERE v.id = %s
+            """
+            cursor.execute(query_venta, (id_venta,))
+            venta = cursor.fetchone()
+
+            if not venta:
+                return jsonify({"ok": False, "mensaje": "Factura no encontrada"}), 404
+
+            # 2. Obtener los productos comprados en esa venta
+            query_items = """
+                SELECT p.nombre AS nombre_producto, dv.cantidad, dv.precio_unitario, (dv.cantidad * dv.precio_unitario) AS subtotal
+                FROM detalle_ventas dv
+                JOIN productos p ON dv.id_producto = p.id
+                WHERE dv.id_venta = %s
+            """
+            cursor.execute(query_items, (id_venta,))
+            items = cursor.fetchall()
+
+            # Estructurar la respuesta para el JS
+            venta['items'] = items
+
+        conexion.close()
+        return jsonify(venta), 200
+    except Exception as e:
+        return jsonify({"ok": False, "mensaje": str(e)}), 500
