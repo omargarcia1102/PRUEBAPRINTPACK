@@ -598,3 +598,88 @@ def actualizar_cliente(id):
     except Exception as e:
         cursor.close()
         return jsonify({'ok': False, 'mensaje': str(e)}), 400
+
+
+from werkzeug.security import generate_password_hash
+
+# ==========================================
+# RUTAS DE LA VISTA Y API DE USUARIOS (SOLO ADMIN)
+# ==========================================
+
+@main.route('/usuarios')
+def usuarios_vista():
+    # Seguridad de la vista: Solo el admin entra aquí
+    if session.get('rol') != 'admin':
+        return redirect(url_for('main.inicio'))
+    return render_template('USUARIOS.html')
+
+@main.route('/api/usuarios', methods=['GET'])
+def get_usuarios():
+    if session.get('rol') != 'admin':
+        return jsonify({'ok': False, 'mensaje': 'No autorizado'}), 401
+        
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    # No enviamos las contraseñas al frontend por seguridad
+    cursor.execute("SELECT id, usuario, rol, estado FROM usuarios ORDER BY usuario ASC")
+    usuarios = cursor.fetchall()
+    cursor.close()
+    return jsonify(usuarios)
+
+@main.route('/api/usuarios', methods=['POST'])
+def crear_usuario():
+    if session.get('rol') != 'admin':
+        return jsonify({'ok': False, 'mensaje': 'No autorizado'}), 401
+        
+    d = request.get_json()
+    usuario = d.get('usuario')
+    password_plana = d.get('password')
+    rol = d.get('rol')
+
+    if not usuario or not password_plana or not rol:
+        return jsonify({'ok': False, 'mensaje': 'Datos incompletos'}), 400
+
+    password_hash = generate_password_hash(password_plana)
+    cursor = mysql.connection.cursor()
+    
+    try:
+        cursor.execute("""
+            INSERT INTO usuarios (usuario, password, rol, estado)
+            VALUES (%s, %s, %s, 'activo')
+        """, (usuario, password_hash, rol))
+        mysql.connection.commit()
+        cursor.close()
+        return jsonify({'ok': True, 'mensaje': 'Usuario creado correctamente'})
+    except Exception as e:
+        cursor.close()
+        return jsonify({'ok': False, 'mensaje': 'Error (¿El usuario ya existe?)'}), 400
+
+@main.route('/api/usuarios/<int:id>', methods=['PUT'])
+def actualizar_usuario(id):
+    if session.get('rol') != 'admin':
+        return jsonify({'ok': False, 'mensaje': 'No autorizado'}), 401
+        
+    d = request.get_json()
+    rol = d.get('rol')
+    estado = d.get('estado')
+    nueva_password = d.get('password') # Puede venir vacía si no la quieren cambiar
+
+    cursor = mysql.connection.cursor()
+    try:
+        if nueva_password:
+            # Si el admin escribió una nueva clave, la encriptamos y la actualizamos
+            password_hash = generate_password_hash(nueva_password)
+            cursor.execute("""
+                UPDATE usuarios SET rol=%s, estado=%s, password=%s WHERE id=%s
+            """, (rol, estado, password_hash, id))
+        else:
+            # Si dejaron la clave vacía, solo actualizamos rol y estado
+            cursor.execute("""
+                UPDATE usuarios SET rol=%s, estado=%s WHERE id=%s
+            """, (rol, estado, id))
+            
+        mysql.connection.commit()
+        cursor.close()
+        return jsonify({'ok': True, 'mensaje': 'Usuario actualizado'})
+    except Exception as e:
+        cursor.close()
+        return jsonify({'ok': False, 'mensaje': str(e)}), 400
