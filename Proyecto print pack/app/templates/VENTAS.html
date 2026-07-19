@@ -2,11 +2,383 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Ventas - PrintPack Caribe</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Punto de Venta - Sistema ERP</title>
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        .producto-card { cursor: pointer; transition: transform 0.2s; }
+        .producto-card:hover { transform: scale(1.02); border-color: #0d6efd; }
+        .carrito-container { height: 60vh; overflow-y: auto; }
+        .catalogo-container { height: 75vh; overflow-y: auto; }
+    </style>
 </head>
-<body>
-    <h1>Módulo de Ventas</h1>
-    <p>En construcción...</p>
-    <a href="/">Volver al inicio</a>
+<body class="bg-light">
+
+<!-- Navbar básico (ajusta según tu diseño maestro) -->
+<nav class="navbar navbar-dark bg-dark mb-4">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1"><i class="bi bi-cart-check"></i> Módulo de Ventas</span>
+        <a href="/" class="btn btn-outline-light btn-sm">Volver al Inicio</a>
+    </div>
+</nav>
+
+<div class="container-fluid px-4">
+    <div class="row">
+        <!-- ==========================================
+             COLUMNA IZQUIERDA: CARRITO Y FACTURACIÓN
+        =========================================== -->
+        <div class="col-lg-5 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Detalle de Factura</h5>
+                </div>
+                <div class="card-body d-flex flex-column">
+                    
+                    <!-- Selección de Cliente -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Cliente</label>
+                        <div class="input-group">
+                            <select id="selectCliente" class="form-select">
+                                <option value="">Seleccione un cliente...</option>
+                            </select>
+                            <button class="btn btn-outline-secondary" type="button" onclick="mostrarModalCliente()">
+                                <i class="bi bi-person-plus"></i> Nuevo
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Tabla del Carrito -->
+                    <div class="carrito-container border rounded p-2 mb-3 flex-grow-1">
+                        <table class="table table-sm table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cant.</th>
+                                    <th>Precio</th>
+                                    <th>Subtotal</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaCarrito">
+                                <!-- Los items se renderizan aquí con JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Totales y Botón Procesar -->
+                    <div class="mt-auto border-top pt-3">
+                        <div class="mb-2">
+                            <label class="form-label text-muted small">Notas de la venta (Opcional)</label>
+                            <input type="text" id="notasVenta" class="form-control form-control-sm" placeholder="Ej: Entrega a domicilio...">
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="mb-0">TOTAL:</h4>
+                            <h3 class="mb-0 text-success" id="totalVenta">$0</h3>
+                        </div>
+                        <button id="btnProcesarVenta" class="btn btn-success w-100 btn-lg" onclick="procesarVenta()">
+                            <i class="bi bi-check-circle"></i> Procesar Venta
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             COLUMNA DERECHA: CATÁLOGO DE PRODUCTOS
+        =========================================== -->
+        <div class="col-lg-7 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Catálogo de Productos</h5>
+                    <input type="text" id="buscarProducto" class="form-control form-control-sm w-50" placeholder="Buscar por nombre o código..." onkeyup="filtrarProductos()">
+                </div>
+                <div class="card-body catalogo-container bg-light">
+                    <div class="row g-3" id="listaProductos">
+                        <!-- Los productos se renderizan aquí con JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     MODAL: CREAR NUEVO CLIENTE
+=========================================== -->
+<div class="modal fade" id="modalNuevoCliente" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Registrar Nuevo Cliente</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formCliente">
+            <div class="mb-2">
+                <label>Nombre Completo *</label>
+                <input type="text" id="cliNombre" class="form-control" required>
+            </div>
+            <div class="mb-2">
+                <label>Empresa (Opcional)</label>
+                <input type="text" id="cliEmpresa" class="form-control">
+            </div>
+            <div class="mb-2">
+                <label>Teléfono *</label>
+                <input type="text" id="cliTelefono" class="form-control" required>
+            </div>
+            <div class="mb-2">
+                <label>Email</label>
+                <input type="email" id="cliEmail" class="form-control">
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" onclick="guardarCliente()">Guardar Cliente</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Variables globales
+    let productosStock = [];
+    let carrito = [];
+    const modalCliente = new bootstrap.Modal(document.getElementById('modalNuevoCliente'));
+
+    // Al cargar la página
+    document.addEventListener("DOMContentLoaded", () => {
+        cargarClientes();
+        cargarProductos();
+    });
+
+    // ==========================================
+    // LOGICA DE DATOS (FETCH)
+    // ==========================================
+    async function cargarClientes() {
+        const res = await fetch('/api/clientes');
+        const clientes = await res.json();
+        const select = document.getElementById('selectCliente');
+        select.innerHTML = '<option value="">Seleccione un cliente...</option>';
+        clientes.forEach(c => {
+            select.innerHTML += `<option value="${c.id}">${c.nombre} ${c.empresa ? ' - '+c.empresa : ''}</option>`;
+        });
+    }
+
+    async function cargarProductos() {
+        const res = await fetch('/api/productos');
+        productosStock = await res.json();
+        renderizarCatalogo(productosStock);
+    }
+
+    // ==========================================
+    // LOGICA DEL CATÁLOGO
+    // ==========================================
+    function renderizarCatalogo(productos) {
+        const contenedor = document.getElementById('listaProductos');
+        contenedor.innerHTML = '';
+        
+        productos.forEach(p => {
+            // Manejo de UI de stock
+            const sinStock = p.stock <= 0;
+            const badgeColor = sinStock ? 'bg-danger' : (p.stock <= 50 ? 'bg-warning text-dark' : 'bg-success');
+            const precioFmt = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(p.costo || 0);
+            
+            contenedor.innerHTML += `
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 producto-card ${sinStock ? 'opacity-50' : ''}" onclick="agregarAlCarrito(${p.id})">
+                        <div class="card-body p-3">
+                            <h6 class="card-title text-truncate mb-1" title="${p.nombre}">${p.nombre}</h6>
+                            <small class="text-muted d-block mb-2">Cód: ${p.codigo}</small>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="fw-bold text-primary">${precioFmt}</span>
+                                <span class="badge ${badgeColor}">${p.stock} unds</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    function filtrarProductos() {
+        const texto = document.getElementById('buscarProducto').value.toLowerCase();
+        const filtrados = productosStock.filter(p => 
+            p.nombre.toLowerCase().includes(texto) || p.codigo.toLowerCase().includes(texto)
+        );
+        renderizarCatalogo(filtrados);
+    }
+
+    // ==========================================
+    // LOGICA DEL CARRITO
+    // ==========================================
+    function agregarAlCarrito(idProducto) {
+        const prod = productosStock.find(p => p.id === idProducto);
+        
+        if (prod.stock <= 0) {
+            alert('Este producto no tiene stock disponible.');
+            return;
+        }
+
+        const itemExistente = carrito.find(i => i.id_producto === idProducto);
+        
+        if (itemExistente) {
+            if (itemExistente.cantidad < prod.stock) {
+                itemExistente.cantidad++;
+            } else {
+                alert('No hay más stock disponible de este producto.');
+            }
+        } else {
+            carrito.push({
+                id_producto: prod.id,
+                nombre_producto: prod.nombre,
+                precio_unitario: parseFloat(prod.costo || 0),
+                cantidad: 1,
+                stock_maximo: prod.stock
+            });
+        }
+        actualizarUI();
+    }
+
+    function modificarCantidad(idProducto, delta) {
+        const item = carrito.find(i => i.id_producto === idProducto);
+        if (!item) return;
+
+        const nuevaCantidad = item.cantidad + delta;
+        if (nuevaCantidad > item.stock_maximo) {
+            alert('Límite de stock alcanzado.');
+            return;
+        }
+        
+        if (nuevaCantidad <= 0) {
+            carrito = carrito.filter(i => i.id_producto !== idProducto);
+        } else {
+            item.cantidad = nuevaCantidad;
+        }
+        actualizarUI();
+    }
+
+    function actualizarUI() {
+        const tbody = document.getElementById('tablaCarrito');
+        tbody.innerHTML = '';
+        let total = 0;
+
+        carrito.forEach(item => {
+            const subtotal = item.cantidad * item.precio_unitario;
+            total += subtotal;
+            
+            const pFmt = new Intl.NumberFormat('es-CO').format(item.precio_unitario);
+            const subFmt = new Intl.NumberFormat('es-CO').format(subtotal);
+
+            tbody.innerHTML += `
+                <tr>
+                    <td class="text-truncate" style="max-width: 150px;" title="${item.nombre_producto}">
+                        <small>${item.nombre_producto}</small>
+                    </td>
+                    <td>
+                        <div class="input-group input-group-sm" style="width: 80px;">
+                            <button class="btn btn-outline-secondary px-2" onclick="modificarCantidad(${item.id_producto}, -1)">-</button>
+                            <input type="text" class="form-control text-center px-0" value="${item.cantidad}" readonly>
+                            <button class="btn btn-outline-secondary px-2" onclick="modificarCantidad(${item.id_producto}, 1)">+</button>
+                        </div>
+                    </td>
+                    <td>$${pFmt}</td>
+                    <td class="fw-bold">$${subFmt}</td>
+                    <td>
+                        <button class="btn btn-sm btn-danger px-2 py-0" onclick="modificarCantidad(${item.id_producto}, -999)">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        document.getElementById('totalVenta').innerText = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(total);
+    }
+
+    // ==========================================
+    // PROCESAR VENTA (POST AL BACKEND)
+    // ==========================================
+    async function procesarVenta() {
+        const idCliente = document.getElementById('selectCliente').value;
+        const notas = document.getElementById('notasVenta').value;
+
+        if (!idCliente) return alert('Por favor, seleccione un cliente primero.');
+        if (carrito.length === 0) return alert('El carrito está vacío.');
+
+        const boton = document.getElementById('btnProcesarVenta');
+        boton.disabled = true;
+        boton.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Procesando...';
+
+        try {
+            const response = await fetch('/api/ventas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id_cliente: idCliente,
+                    notas: notas,
+                    items: carrito
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.ok) {
+                alert(`¡Venta Exitosa! Factura generada: ${data.numero_factura}`);
+                carrito = []; // Limpiar carrito
+                document.getElementById('notasVenta').value = '';
+                document.getElementById('selectCliente').value = '';
+                actualizarUI();
+                await cargarProductos(); // Recargar stock actualizado
+            } else {
+                alert('Error al procesar: ' + data.mensaje);
+            }
+        } catch (error) {
+            alert('Error de conexión con el servidor.');
+        } finally {
+            boton.disabled = false;
+            boton.innerHTML = '<i class="bi bi-check-circle"></i> Procesar Venta';
+        }
+    }
+
+    // ==========================================
+    // CREAR NUEVO CLIENTE
+    // ==========================================
+    function mostrarModalCliente() {
+        document.getElementById('formCliente').reset();
+        modalCliente.show();
+    }
+
+    async function guardarCliente() {
+        const nombre = document.getElementById('cliNombre').value;
+        const telefono = document.getElementById('cliTelefono').value;
+        
+        if (!nombre || !telefono) return alert("Nombre y Teléfono son obligatorios.");
+
+        const payload = {
+            nombre: nombre,
+            telefono: telefono,
+            empresa: document.getElementById('cliEmpresa').value,
+            email: document.getElementById('cliEmail').value
+        };
+
+        const response = await fetch('/api/clientes', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+            await cargarClientes(); // Recargar lista
+            modalCliente.hide();
+            alert("Cliente creado exitosamente");
+        } else {
+            alert("Error al guardar el cliente");
+        }
+    }
+</script>
 </body>
 </html>
