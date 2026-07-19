@@ -63,57 +63,73 @@ async function verDetalle(idVenta) {
     try {
         const response = await fetch(`/api/ventas/${idVenta}`);
         
-        // 1. VERIFICAR PRIMERO: Si Flask respondió con un error (ej. 500 o 404)
         if (!response.ok) {
-            const textoError = await response.text();
-            console.error("Error detallado del servidor:", textoError);
-            alert(`Error en el servidor (Código HTTP ${response.status}).\nRevisa los logs de Render o la consola del navegador (F12).`);
+            alert(`Error en el servidor: ${response.status}`);
             return;
         }
 
-        // 2. PROCESAR JSON: Solo si el servidor respondió con un estado exitoso (200)
-        const data = await response.json();
+        const rawData = await response.json();
+        console.log("Datos crudos recibidos:", rawData);
 
-        // Llenar datos de la cabecera del modal de forma segura
+        // 1. AUTO-NORMALIZACIÓN: Por si los datos vienen envueltos en una lista o en una propiedad '.data'
+        let data = rawData;
+        if (Array.isArray(rawData)) {
+            data = rawData[0];
+        } else if (rawData && rawData.data) {
+            data = rawData.data;
+        }
+
+        if (!data) {
+            alert("La API devolvió un objeto vacío.");
+            return;
+        }
+
+        // 2. AVISO DE DIAGNÓSTICO TEMPORAL: Te dirá exactamente qué llaves detecta el navegador
+        const llavesDetectadas = Object.keys(data).join(", ");
+        alert(`¡Conexión exitosa!\nLlaves que envió el servidor: [${llavesDetectadas}]`);
+
+        // 3. LLENAR DATOS DE LA CABECERA (Soporta minúsculas y mayúsculas comunes)
         document.getElementById('tituloModalFactura').innerText = `Factura #${data.id || idVenta}`;
-        document.getElementById('detalleCliente').innerText = data.nombre_cliente || 'N/A';
-        document.getElementById('detalleFecha').innerText = data.fecha ? new Date(data.fecha).toLocaleString('es-CO') : 'N/A';
-        document.getElementById('detalleTotal').innerText = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(data.total || 0);
+        document.getElementById('detalleCliente').innerText = data.nombre_cliente || data.cliente || data.Cliente || 'N/A';
+        document.getElementById('detalleFecha').innerText = data.fecha || data.Fecha ? new Date(data.fecha || data.Fecha).toLocaleString('es-CO') : 'N/A';
+        document.getElementById('detalleTotal').innerText = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(data.total || data.Total || 0);
 
-        // Llenar tabla de items
+        // 4. PROCESAR PRODUCTOS VINCULADOS
+        const items = data.items || data.productos || data.Productos || [];
         const tbodyItems = document.getElementById('tablaDetalleItems');
+        
         if (tbodyItems) {
             tbodyItems.innerHTML = '';
             
-            if (data.items && Array.isArray(data.items)) {
-                data.items.forEach(item => {
-                    const precioFmt = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(item.precio_unitario || 0);
-                    const subtotalFmt = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(item.subtotal || 0);
+            if (items && items.length > 0) {
+                items.forEach(item => {
+                    // Soporta variaciones comunes de nombres de columnas
+                    const nombreProd = item.nombre_producto || item.producto || item.nombre || 'Desconocido';
+                    const cantidad = item.cantidad || item.Cant || 0;
+                    const precio = item.precio_unitario || item.precio || 0;
+                    const subtotal = item.subtotal || (cantidad * precio);
+
+                    const precioFmt = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(precio);
+                    const subtotalFmt = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(subtotal);
                     
                     tbodyItems.innerHTML += `
                         <tr>
-                            <td>${item.nombre_producto || 'Desconocido'}</td>
-                            <td class="text-center">${item.cantidad || 0}</td>
+                            <td>${nombreProd}</td>
+                            <td class="text-center">${cantidad}</td>
                             <td class="text-end text-muted">${precioFmt}</td>
                             <td class="text-end fw-bold">${subtotalFmt}</td>
                         </tr>
                     `;
                 });
             } else {
-                tbodyItems.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No se encontraron productos vinculados.</td></tr>';
+                tbodyItems.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No se encontraron productos vinculados en esta estructura.</td></tr>`;
             }
         }
 
-        // Mostrar el modal si está inicializado
-        if (modalDetalle) {
-            modalDetalle.show();
-        } else {
-            alert("El modal no se ha inicializado correctamente en el DOM.");
-        }
+        modalDetalle.show();
 
     } catch (error) {
-        // Captura cualquier error de sintaxis o variables no definidas en JavaScript
-        console.error("Error completo en JavaScript:", error);
-        alert("Error detectado en el navegador:\n" + error.message);
+        console.error("Error en JS:", error);
+        alert("Error en el navegador:\n" + error.message);
     }
 }
