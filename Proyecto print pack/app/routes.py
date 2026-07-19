@@ -728,3 +728,66 @@ def exportar_inventario():
 
     except Exception as e:
         return jsonify({'ok': False, 'mensaje': str(e)}), 500
+
+
+# ==========================================
+# RUTA PARA EXPORTAR HISTORIAL DE VENTAS A EXCEL
+# ==========================================
+@main.route('/api/exportar/ventas', methods=['GET'])
+def exportar_ventas():
+    # Seguridad: Solo el admin puede descargar el reporte financiero
+    if session.get('rol') != 'admin':
+        return jsonify({'ok': False, 'mensaje': 'No autorizado'}), 401
+
+    try:
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        # Hacemos un JOIN para que en el Excel salga el nombre del cliente y no su ID numérico
+        cursor.execute("""
+            SELECT v.id, c.nombre AS nombre_cliente, v.fecha, v.total 
+            FROM ventas v
+            LEFT JOIN clientes c ON v.cliente_id = c.id
+            ORDER BY v.fecha DESC
+        """)
+        ventas = cursor.fetchall()
+        cursor.close()
+
+        # Crear el archivo Excel
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = "Reporte de Ventas"
+
+        # Encabezados de las columnas
+        encabezados = ['N° Factura', 'Cliente', 'Fecha de Venta', 'Total Pagado']
+        ws.append(encabezados)
+
+        # Formato de negrita para los encabezados
+        for celda in ws[1]:
+            celda.font = openpyxl.styles.Font(bold=True)
+
+        # Llenar los datos fila por fila
+        for v in ventas:
+            # Formatear la fecha para que se vea limpia en Excel
+            fecha_limpia = v.get('fecha').strftime('%Y-%m-%d %H:%M') if v.get('fecha') else 'N/A'
+            
+            ws.append([
+                v.get('id'), 
+                v.get('nombre_cliente') or 'Cliente Mostrador', 
+                fecha_limpia, 
+                v.get('total')
+            ])
+
+        # Guardar en memoria temporal
+        memoria = io.BytesIO()
+        wb.save(memoria)
+        memoria.seek(0)
+
+        # Enviar el archivo para descarga
+        return send_file(
+            memoria,
+            mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            as_attachment=True,
+            download_name='Reporte_Ventas_PrintPack.xlsx'
+        )
+
+    except Exception as e:
+        return jsonify({'ok': False, 'mensaje': str(e)}), 500
