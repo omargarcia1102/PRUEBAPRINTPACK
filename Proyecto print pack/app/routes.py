@@ -741,11 +741,12 @@ def exportar_ventas():
 
     try:
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        # Hacemos un JOIN para que en el Excel salga el nombre del cliente y no su ID numérico
+        # Corregido: ON v.id_cliente = c.id
+        # Mejora: Traemos v.numero_factura en lugar de v.id
         cursor.execute("""
-            SELECT v.id, c.nombre AS nombre_cliente, v.fecha, v.total 
+            SELECT v.numero_factura, c.nombre AS nombre_cliente, v.fecha, v.total 
             FROM ventas v
-            LEFT JOIN clientes c ON v.cliente_id = c.id
+            LEFT JOIN clientes c ON v.id_cliente = c.id
             ORDER BY v.fecha DESC
         """)
         ventas = cursor.fetchall()
@@ -770,7 +771,7 @@ def exportar_ventas():
             fecha_limpia = v.get('fecha').strftime('%Y-%m-%d %H:%M') if v.get('fecha') else 'N/A'
             
             ws.append([
-                v.get('id'), 
+                v.get('numero_factura'), # Ahora mostrará "FAC-2026-6116"
                 v.get('nombre_cliente') or 'Cliente Mostrador', 
                 fecha_limpia, 
                 v.get('total')
