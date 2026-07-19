@@ -6,6 +6,8 @@ import requests
 from datetime import timedelta
 import MySQLdb
 from werkzeug.security import generate_password_hash, check_password_hash
+import random
+from datetime import datetime
 
 
 def enviar_telegram(mensaje):
@@ -320,3 +322,184 @@ def sesion():
         'es_asesor': session.get('rol') == 'asesor',
         'rol':      session.get('rol', '')
     })
+
+
+# ============================================
+# CLIENTES
+# ============================================
+
+@main.route('/api/clientes', methods=['GET'])
+def get_clientes():
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute("SELECT * FROM clientes ORDER BY nombre ASC")
+    resultado = cursor.fetchall()
+    cursor.close()
+    return jsonify(resultado)
+
+@main.route('/api/clientes', methods=['POST'])
+def crear_cliente():
+    d = request.get_json()
+    cursor = mysql.connection.cursor()
+    try:
+        cursor.execute("""
+            INSERT INTO clientes (nombre, email, telefono, empresa)
+            VALUES (%s, %s, %s, %s)
+        """, (
+            d.get('nombre'),
+            d.get('email'),
+            d.get('telefono'),
+            d.get('empresa')
+        ))
+        mysql.connection.commit()
+        cursor.close()
+        return jsonify({'ok': True}), 201
+    except Exception as e:
+        cursor.close()
+        return jsonify({'ok': False, 'mensaje': str(e)}), 400
+
+# ============================================
+# VENTAS
+# ============================================
+
+def generar_numero_factura():
+    anio = datetime.now().strftime('%Y')
+    numero = random.randint(1000, 9999)
+    return f"FAC-{anio}-{numero}"
+
+@main.route('/api/ventas', methods=['GET'])
+def get_ventas():
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute("""
+        SELECT v.*, c.nombre as nombre_cliente
+        FROM ventas v
+        JOIN clientes c ON v.id_cliente = c.id
+        ORDER BY v.fecha DESC
+    """)
+    resultado = cursor.fetchall()
+    cursor.close()
+    for row in resultado:
+        if row.get('fecha'):
+            row['fecha'] = row['fecha'].strftime('%Y-%m-%d %H:%M:%S')
+    return jsonify(resultado)
+
+@main.route('/api/ventas', methods=['POST'])
+def crear_venta():
+    d = request.get_json()
+    id_cliente = d.get('id_cliente')
+    items      = d.get('items')  # lista de {id_producto, cantidad, precio_unitario}
+    notas      = d.get('notas', '')
+
+    if not id_cliente or not items:
+        return jsonify({'ok': False, 'mensaje': 'Datos incompletos'}), 400
+
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    try:
+        # Calcular total
+        total = sum(i['cantidad'] * i['precio_unitario'] for i in items)
+
+        # Generar número de factura único
+        numero_factura = generar_numero_factura()
+
+        # Insertar venta
+        cursor.execute("""
+            INSERT INTO ventas (numero_factura, id_cliente, id_usuario, total, notas)
+            VALUES (%s, %s, %s, %s, %s)
+        """, (
+            numero_factura,
+            id_cliente,
+            session.get('usuario'),
+            total,
+            notas
+        ))
+        id_venta = cursor.lastrowid
+
+        # Insertar detalle y descontar stock
+        for item in items:
+            id_producto     = item['id_producto']
+            cantidad        = item['cantidad']
+            precio_unitario = item['precio_unitario']
+            subtotal        = cantidad * precio_unitario
+            nombre_producto = item.get('nombre_producto', '')
+
+            # Verificar stock suficiente
+            cursor.execute("SELECT stock, nombre FROM productos WHERE id=%s", (id_producto,))
+            producto = cursor.fetchone()
+
+            if not producto or producto['stock'] < cantidad:
+                raise Exception(f"Stock insuficiente para {nombre_producto}")
+
+            # Insertar detalle
+            cursor.execute("""
+                INSERT INTO detalle_ventas
+                (id_venta, id_producto, nombre_producto, cantidad, precio_unitario, subtotal)
+                VALUES (%s, %s, %s, %s, %s, %s)
+            """, (id_venta, id_producto, nombre_producto, cantidad, precio_unitario, subtotal))
+
+            # Descontar stock
+            cursor.execute("""
+                UPDATE productos SET stock = stock - %s WHERE id = %s
+            """, (cantidad, id_producto))
+
+            # Registrar en movimientos
+            cursor.execute("""
+                INSERT INTO movimientos
+                (id_producto, nombre_producto, tipo_movimiento, usuario, detalle, stock_anterior, stock_nuevo)
+                VALUES (%s, %s, 'ELIMINAR', %s, %s, %s, %s)
+            """, (
+                id_producto,
+                nombre_producto,
+                session.get('usuario'),
+                f"Venta #{numero_factura}",
+                producto['stock'],
+                producto['stock'] - cantidad
+            ))
+
+        mysql.connection.commit()
+
+        # Notificación Telegram
+        total_fmt = f"${int(total):,}".replace(',', '.')
+        mensaje = (
+            f"🧾 <b>NUEVA VENTA REGISTRADA</b>\n"
+            f"━━━━━━━━━━━━━━━━━━━━\n"
+            f"📋 <b>Factura:</b> {numero_factura}\n"
+            f"👤 <b>Asesor:</b> {session.get('usuario')}\n"
+            f"🛍️ <b>Productos:</b> {len(items)}\n"
+            f"💰 <b>Total:</b> {total_fmt} COP\n"
+            f"⏰ <b>Hora:</b> {hora_colombia()}\n"
+            f"━━━━━━━━━━━━━━━━━━━━"
+        )
+        enviar_telegram(mensaje)
+
+        cursor.close()
+        return jsonify({'ok': True, 'numero_factura': numero_factura, 'total': total}), 201
+
+    except Exception as e:
+        mysql.connection.rollback()
+        cursor.close()
+        return jsonify({'ok': False, 'mensaje': str(e)}), 400
+
+@main.route('/api/ventas/<int:id>', methods=['GET'])
+def get_venta_detalle(id):
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute("""
+        SELECT v.*, c.nombre as nombre_cliente, c.email, c.empresa, c.telefono
+        FROM ventas v
+        JOIN clientes c ON v.id_cliente = c.id
+        WHERE v.id = %s
+    """, (id,))
+    venta = cursor.fetchone()
+
+    if not venta:
+        cursor.close()
+        return jsonify({'ok': False, 'mensaje': 'Venta no encontrada'}), 404
+
+    cursor.execute("""
+        SELECT * FROM detalle_ventas WHERE id_venta = %s
+    """, (id,))
+    detalle = cursor.fetchall()
+    cursor.close()
+
+    if venta.get('fecha'):
+        venta['fecha'] = venta['fecha'].strftime('%Y-%m-%d %H:%M:%S')
+
+    return jsonify({'venta': venta, 'detalle': detalle})
