@@ -64,6 +64,12 @@ async function verDetalle(idVenta) {
         const response = await fetch(`/api/ventas/${idVenta}`);
         const data = await response.json();
 
+        // NUEVO: Si el backend responde con un error (404 o 500), muéstralo directamente
+        if (!response.ok) {
+            alert("Error del servidor: " + (data.mensaje || "Error desconocido"));
+            return;
+        }
+
         // Llenar datos de la cabecera del modal
         document.getElementById('tituloModalFactura').innerText = `Factura #${data.id}`;
         document.getElementById('detalleCliente').innerText = data.nombre_cliente;
@@ -72,25 +78,27 @@ async function verDetalle(idVenta) {
 
         // Llenar tabla de items
         const tbodyItems = document.getElementById('tablaDetalleItems');
-        tbodyItems.innerHTML = '';
-        
-        data.items.forEach(item => {
-            const precioFmt = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(item.precio_unitario);
-            const subtotalFmt = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(item.subtotal);
+        if (tbodyItems) {
+            tbodyItems.innerHTML = '';
             
-            tbodyItems.innerHTML += `
-                <tr>
-                    <td>${item.nombre_producto}</td>
-                    <td class="text-center">${item.cantidad}</td>
-                    <td class="text-end text-muted">${precioFmt}</td>
-                    <td class="text-end fw-bold">${subtotalFmt}</td>
-                </tr>
-            `;
-        });
+            data.items.forEach(item => {
+                const precioFmt = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(item.precio_unitario);
+                const subtotalFmt = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(item.subtotal);
+                
+                tbodyItems.innerHTML += `
+                    <tr>
+                        <td>${item.nombre_producto}</td>
+                        <td class="text-center">${item.cantidad}</td>
+                        <td class="text-end text-muted">${precioFmt}</td>
+                        <td class="text-end fw-bold">${subtotalFmt}</td>
+                    </tr>
+                `;
+            });
+        }
 
         modalDetalle.show();
     } catch (error) {
         console.error("Error al cargar detalle:", error);
-        alert("Hubo un error al cargar los detalles de la factura.");
+        alert("Error de renderizado o comunicación en el navegador.");
     }
 }
