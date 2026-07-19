@@ -792,3 +792,14 @@ def exportar_ventas():
 
     except Exception as e:
         return jsonify({'ok': False, 'mensaje': str(e)}), 500
+
+
+# ==========================================
+# RUTA DEL PANEL PRINCIPAL (DASHBOARD)
+# ==========================================
+@main.route('/dashboard')
+def dashboard():
+    # Solo usuarios logueados pueden ver el panel
+    if not session.get('rol'):
+        return redirect(url_for('main.acceder'))
+    return render_template('DASHBOARD.html')
