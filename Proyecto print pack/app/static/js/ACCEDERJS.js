@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
         loginForm.addEventListener("submit", async (e) => {
             e.preventDefault();
 
-            const usuario = document.getElementById("userInput").value;
+            const usuario  = document.getElementById("userInput").value;
             const password = document.getElementById("passInput").value;
 
             const res = await fetch('/login', {
@@ -17,8 +17,15 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await res.json();
 
             if (data.ok) {
-                alert("¡Bienvenido, Administrador!");
-                window.location.href = "/inventario";
+                alert("¡Bienvenido!");
+                // Redirige según el rol
+                if (data.rol === 'admin') {
+                    window.location.href = "/";
+                } else if (data.rol === 'asesor') {
+                    window.location.href = "/ventas";
+                } else {
+                    window.location.href = "/";
+                }
             } else {
                 alert(data.mensaje || "Credenciales incorrectas");
             }
