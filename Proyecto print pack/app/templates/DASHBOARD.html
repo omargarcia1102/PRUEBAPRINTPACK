@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrintPack Caribe - Panel ERP</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tu base corporativa -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <!-- Reutilizamos el CSS de Inicio para las tarjetas -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/INICIOCSS.css') }}">
+
+    <style>
+        /* Pequeños ajustes exclusivos para el Dashboard */
+        .dashboard-header {
+            background: var(--dark);
+            padding: 60px 48px;
+            text-align: center;
+        }
+        .dashboard-header h1 {
+            color: #fff;
+            font-size: 2.8em;
+            margin-bottom: 10px;
+        }
+        .dashboard-header p {
+            color: #a7abb8;
+            font-size: 1.1em;
+        }
+        .card-erp-link {
+            text-decoration: none;
+            display: block;
+            color: inherit;
+        }
+        .card-erp-link:hover .highlight-card {
+            background: var(--blue-tint);
+            border-color: var(--blue);
+            transform: translateY(-6px);
+        }
+        .card-erp-link:hover .highlight-card i {
+            background: var(--dark);
+        }
+        /* Ocultar tarjeta de usuarios a asesores */
+        .admin-only { display: none; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <a href="{{ url_for('main.inicio') }}">
+                <img src="https://printpackcaribe.com/wp-content/uploads/2025/08/ECOBOLSAS-CARIBE-PRINTPACK-LOGOS-4-scaled-324x141.png" alt="PrintPack Caribe">
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('main.inicio') }}">Inicio</a></li>
+                <li><a href="{{ url_for('main.procesos') }}">Procesos</a></li>
+                <li><a href="{{ url_for('main.productos') }}">Productos</a></li>
+                <li><a href="{{ url_for('main.contacto') }}">Contáctanos</a></li>
+                <li><a href="{{ url_for('main.inventario') }}">Inventario</a></li>
+                <li><a href="{{ url_for('main.dashboard') }}" class="active">Panel ERP</a></li>
+            </ul>
+        </nav>
+        <a href="{{ url_for('main.logout') }}" class="btn-nav" id="btn-cerrar-sesion">Cerrar Sesión</a>
+    </header>
+
+    <main>
+        <section class="dashboard-header">
+            <h1>Centro de Control ERP</h1>
+            <p id="saludo-usuario">Bienvenido al sistema de gestión de PrintPack Caribe</p>
+        </section>
+
+        <section class="highlights" style="padding-top: 50px;">
+            <span class="eyebrow">Módulos del Sistema</span>
+            <h2>Gestión y Administración</h2>
+            
+            <div class="highlights-grid">
+                
+                <!-- MÓDULO VENTAS -->
+                <a href="/ventas" class="card-erp-link">
+                    <div class="highlight-card">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <h3>Punto de Venta</h3>
+                        <p>Facturación de productos, registro de compras y cálculo automático de totales.</p>
+                    </div>
+                </a>
+
+                <!-- MÓDULO HISTORIAL -->
+                <a href="/historial_ventas" class="card-erp-link">
+                    <div class="highlight-card">
+                        <i class="fa-solid fa-receipt"></i>
+                        <h3>Historial de Ventas</h3>
+                        <p>Auditoría de facturas emitidas, visualización de tickets y exportación a Excel.</p>
+                    </div>
+                </a>
+
+                <!-- MÓDULO CLIENTES -->
+                <a href="/clientes" class="card-erp-link">
+                    <div class="highlight-card">
+                        <i class="fa-solid fa-users"></i>
+                        <h3>Directorio de Clientes</h3>
+                        <p>Base de datos de compradores, empresas frecuentes e información de contacto.</p>
+                    </div>
+                </a>
+
+                <!-- MÓDULO INVENTARIO -->
+                <a href="{{ url_for('main.inventario') }}" class="card-erp-link">
+                    <div class="highlight-card">
+                        <i class="fa-solid fa-boxes-stacked"></i>
+                        <h3>Control de Inventario</h3>
+                        <p>Gestión de mercancía, entradas, salidas y control de existencias en tiempo real.</p>
+                    </div>
+                </a>
+
+                <!-- MÓDULO USUARIOS (Solo Admin) -->
+                <a href="/usuarios" class="card-erp-link admin-only" id="card-usuarios">
+                    <div class="highlight-card" style="border-left: 4px solid var(--red);">
+                        <i class="fa-solid fa-shield-halved" style="background: var(--red);"></i>
+                        <h3>Gestión de Usuarios</h3>
+                        <p>Panel de seguridad. Creación de perfiles, asignación de roles y control de accesos.</p>
+                    </div>
+                </a>
+
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p class="copyright" style="border:none; margin:0; padding:0;">
+            Copyright © 2025 PrintPack Caribe - Panel Administrativo
+        </p>
+    </footer>
+
+    
+    <!-- Script para ocultar la gestión de usuarios a los asesores -->
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const res = await fetch('/api/sesion');
+                const sesion = await res.json();
+
+                if (sesion.activo) {
+                    // Cambiamos el saludo si tienes el nombre del usuario
+                    document.getElementById('saludo-usuario').innerText = `Bienvenido al sistema de gestión, ${sesion.usuario || ''}`;
+                    
+                    // Si es admin, le quitamos la clase que oculta la tarjeta de usuarios
+                    if (sesion.rol === 'admin') {
+                        document.getElementById('card-usuarios').classList.remove('admin-only');
+                    }
+                }
+            } catch (error) {
+                console.error("Error cargando perfil", error);
+            }
+        });
+    </script>
+
+</body>
+</html>
