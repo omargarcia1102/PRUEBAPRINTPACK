@@ -4,6 +4,8 @@ from app import mysql
 import os
 import requests
 from datetime import timedelta
+import MySQLdb
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 def enviar_telegram(mensaje):
@@ -58,9 +60,16 @@ def acceder():
 
 @main.route('/inventario')
 def inventario():
-    if not session.get('es_admin'):
+    if session.get('rol') != 'admin':
         return redirect(url_for('main.acceder'))
     return render_template('INVENTARIO.html')
+
+# Admin y asesor
+@main.route('/ventas')
+def ventas():
+    if session.get('rol') not in ['admin', 'asesor']:
+        return redirect(url_for('main.acceder'))
+    return render_template('VENTAS.html')
 
 
 @main.route('/productos')
@@ -79,27 +88,29 @@ def contacto():
 
 
 # LOGIN 
+from werkzeug.security import check_password_hash
+
 @main.route('/login', methods=['POST'])
 def login():
-    data = request.get_json()
-    usuario = data.get('usuario')
+    data     = request.get_json()
+    usuario  = data.get('usuario')
     password = data.get('password')
 
-    cursor = mysql.connection.cursor()
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute(
-        "SELECT * FROM usuarios WHERE usuario = %s AND password = %s",
-        (usuario, password)
+        "SELECT * FROM usuarios WHERE usuario = %s AND estado = 'activo'",
+        (usuario,)
     )
     user = cursor.fetchone()
     cursor.close()
 
-    if user:
-        session['usuario'] = user[1]
-        session['es_admin'] = user[3]
-        return jsonify({'ok': True, 'es_admin': user[3]})
+    if user and check_password_hash(user['password'], password):
+        session['usuario']  = user['usuario']
+        session['rol']      = user['rol']
+        session['es_admin'] = user['rol'] == 'admin'
+        return jsonify({'ok': True, 'rol': user['rol']})
     else:
         return jsonify({'ok': False, 'mensaje': 'Credenciales incorrectas'}), 401
-
 
 # LOGOUT
 @main.route('/logout')
@@ -304,6 +315,8 @@ def get_movimientos():
 @main.route('/api/sesion')
 def sesion():
     return jsonify({
-        'activo': bool(session.get('usuario')),
-        'es_admin': bool(session.get('es_admin'))
+        'activo':   bool(session.get('usuario')),
+        'es_admin': session.get('rol') == 'admin',
+        'es_asesor': session.get('rol') == 'asesor',
+        'rol':      session.get('rol', '')
     })
