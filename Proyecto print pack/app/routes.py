@@ -567,3 +567,10 @@ def obtener_detalle_factura(id_venta):
         return jsonify(venta), 200
     except Exception as e:
         return jsonify({"ok": False, "mensaje": str(e)}), 500
+
+
+@main.route('/clientes')
+def clientes_vista():
+    if session.get('rol') not in ['admin', 'asesor']:
+        return redirect(url_for('main.acceder'))
+    return render_template('CLIENTES.html')
