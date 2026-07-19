@@ -8,6 +8,9 @@ import MySQLdb
 from werkzeug.security import generate_password_hash, check_password_hash
 import random
 from datetime import datetime
+import io
+import openpyxl
+from flask import send_file
 
 
 def enviar_telegram(mensaje):
@@ -683,3 +686,45 @@ def actualizar_usuario(id):
     except Exception as e:
         cursor.close()
         return jsonify({'ok': False, 'mensaje': str(e)}), 400
+
+@main.route('/api/exportar/inventario', methods=['GET'])
+def exportar_inventario():
+    if session.get('rol') != 'admin':
+        return jsonify({'ok': False, 'mensaje': 'No autorizado'}), 401
+
+    try:
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        # Adapté la consulta a las columnas de tu interfaz (stock en lugar de cantidad)
+        cursor.execute("SELECT id, codigo, nombre, stock, costo, bodega FROM productos ORDER BY nombre ASC")
+        productos = cursor.fetchall()
+        cursor.close()
+
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = "Reporte de Inventario"
+
+        # Encabezados de las columnas
+        ws.append(['ID', 'Código', 'Producto', 'Stock Actual', 'Costo', 'Ubicación'])
+        for celda in ws[1]:
+            celda.font = openpyxl.styles.Font(bold=True)
+
+        # Llenar datos
+        for p in productos:
+            ws.append([
+                p.get('id'), p.get('codigo'), p.get('nombre'), 
+                p.get('stock'), p.get('costo'), p.get('bodega')
+            ])
+
+        memoria = io.BytesIO()
+        wb.save(memoria)
+        memoria.seek(0)
+
+        return send_file(
+            memoria,
+            mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            as_attachment=True,
+            download_name='Inventario_PrintPack.xlsx'
+        )
+
+    except Exception as e:
+        return jsonify({'ok': False, 'mensaje': str(e)}), 500
