@@ -574,3 +574,27 @@ def clientes_vista():
     if session.get('rol') not in ['admin', 'asesor']:
         return redirect(url_for('main.acceder'))
     return render_template('CLIENTES.html')
+
+
+@main.route('/api/clientes/<int:id>', methods=['PUT'])
+def actualizar_cliente(id):
+    d = request.get_json()
+    cursor = mysql.connection.cursor()
+    try:
+        cursor.execute("""
+            UPDATE clientes 
+            SET nombre=%s, email=%s, telefono=%s, empresa=%s
+            WHERE id=%s
+        """, (
+            d.get('nombre'),
+            d.get('email'),
+            d.get('telefono'),
+            d.get('empresa'),
+            id
+        ))
+        mysql.connection.commit()
+        cursor.close()
+        return jsonify({'ok': True, 'mensaje': 'Cliente actualizado correctamente'})
+    except Exception as e:
+        cursor.close()
+        return jsonify({'ok': False, 'mensaje': str(e)}), 400
