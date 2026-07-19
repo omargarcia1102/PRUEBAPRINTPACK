@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Clientes - Sistema ERP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-dark bg-dark mb-4">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1"><i class="bi bi-people"></i> Directorio de Clientes</span>
+        <div>
+            <a href="/ventas" class="btn btn-outline-info btn-sm me-2">Ir a Ventas</a>
+            <a href="/" class="btn btn-outline-light btn-sm">Volver al Inicio</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Listado de Clientes</h5>
+            <button class="btn btn-light btn-sm fw-bold" onclick="abrirModalCliente()">
+                <i class="bi bi-person-plus"></i> Registrar Cliente
+            </button>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Nombre Completo</th>
+                            <th>Teléfono</th>
+                            <th>Empresa</th>
+                            <th>Email</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaClientes">
+                        <!-- El JS llenará esto -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: REGISTRAR CLIENTE -->
+<div class="modal fade" id="modalNuevoCliente" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title">Nuevo Cliente</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formCliente">
+            <div class="mb-3">
+                <label class="form-label fw-bold small">Nombre Completo *</label>
+                <input type="text" id="cliNombre" class="form-control" required placeholder="Ej: Juan Pérez">
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold small">Teléfono de contacto *</label>
+                <input type="text" id="cliTelefono" class="form-control" required placeholder="Ej: 3001234567">
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold small">Empresa (Opcional)</label>
+                <input type="text" id="cliEmpresa" class="form-control" placeholder="Ej: Soluciones TIC">
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold small">Correo electrónico (Opcional)</label>
+                <input type="email" id="cliEmail" class="form-control" placeholder="ejemplo@correo.com">
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="btnGuardar" onclick="guardarCliente()">
+            <i class="bi bi-save"></i> Guardar Cliente
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='js/clientes.js') }}"></script>
+</body>
+</html>
