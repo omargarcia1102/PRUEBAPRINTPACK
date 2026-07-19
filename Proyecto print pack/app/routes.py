@@ -504,19 +504,22 @@ def get_venta_detalle(id):
 
     return jsonify({'venta': venta, 'detalle': detalle})
 
+# =======================================================
+#   RUTAS DEL HISTORIAL DE VENTAS (USANDO EL BLUEPRINT)
+# =======================================================
+
 # 1. RUTA PARA VER LA PÁGINA WEB
-@app.route('/historial-ventas')
+@main.route('/historial-ventas')
 def vista_historial_ventas():
     return render_template('HISTORIAL_VENTAS.html')
 
 
 # 2. API EN PUNTO GET: TRAER TODAS LAS VENTAS
-@app.route('/api/ventas', methods=['GET'])
+@main.route('/api/ventas', methods=['GET'])
 def obtener_todas_las_ventas():
     try:
-        conexion = obtener_conexion() # Usa tu función real de conexión a Aiven
+        conexion = obtener_conexion() 
         with conexion.cursor(dictionary=True) as cursor:
-            # Traemos las ventas haciendo un JOIN con clientes para ver el nombre real
             query = """
                 SELECT v.id, v.fecha, v.total, v.notas, c.nombre AS nombre_cliente 
                 FROM ventas v
@@ -532,12 +535,11 @@ def obtener_todas_las_ventas():
 
 
 # 3. API EN PUNTO GET: TRAER EL DETALLE DE UNA FACTURA ESPECÍFICA
-@app.route('/api/ventas/<int:id_venta>', methods=['GET'])
+@main.route('/api/ventas/<int:id_venta>', methods=['GET'])
 def obtener_detalle_factura(id_venta):
     try:
         conexion = obtener_conexion()
         with conexion.cursor(dictionary=True) as cursor:
-            # 1. Obtener la cabecera de la venta
             query_venta = """
                 SELECT v.id, v.fecha, v.total, c.nombre AS nombre_cliente 
                 FROM ventas v
@@ -550,7 +552,6 @@ def obtener_detalle_factura(id_venta):
             if not venta:
                 return jsonify({"ok": False, "mensaje": "Factura no encontrada"}), 404
 
-            # 2. Obtener los productos comprados en esa venta
             query_items = """
                 SELECT p.nombre AS nombre_producto, dv.cantidad, dv.precio_unitario, (dv.cantidad * dv.precio_unitario) AS subtotal
                 FROM detalle_ventas dv
@@ -560,7 +561,6 @@ def obtener_detalle_factura(id_venta):
             cursor.execute(query_items, (id_venta,))
             items = cursor.fetchall()
 
-            # Estructurar la respuesta para el JS
             venta['items'] = items
 
         conexion.close()
