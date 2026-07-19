@@ -64,48 +64,37 @@ async function verDetalle(idVenta) {
         const response = await fetch(`/api/ventas/${idVenta}`);
         
         if (!response.ok) {
-            alert(`Error en el servidor: ${response.status}`);
+            alert(`Error en el servidor al consultar la factura.`);
             return;
         }
 
-        const rawData = await response.json();
-        console.log("Datos crudos recibidos:", rawData);
+        const data = await response.json();
 
-        // 1. AUTO-NORMALIZACIÓN: Por si los datos vienen envueltos en una lista o en una propiedad '.data'
-        let data = rawData;
-        if (Array.isArray(rawData)) {
-            data = rawData[0];
-        } else if (rawData && rawData.data) {
-            data = rawData.data;
-        }
+        // Extraemos los dos bloques de datos exactos que envía tu servidor
+        const venta = data.venta;
+        const detalles = data.detalle;
 
-        if (!data) {
-            alert("La API devolvió un objeto vacío.");
+        if (!venta) {
+            alert("No se encontró la información principal de la venta.");
             return;
         }
 
-        // 2. AVISO DE DIAGNÓSTICO TEMPORAL: Te dirá exactamente qué llaves detecta el navegador
-        const llavesDetectadas = Object.keys(data).join(", ");
-        alert(`¡Conexión exitosa!\nLlaves que envió el servidor: [${llavesDetectadas}]`);
+        // 1. LLENAR DATOS DE LA CABECERA (Usando el bloque 'venta')
+        document.getElementById('tituloModalFactura').innerText = `Factura #${venta.id || idVenta}`;
+        document.getElementById('detalleCliente').innerText = venta.nombre_cliente || venta.cliente || 'N/A';
+        document.getElementById('detalleFecha').innerText = venta.fecha ? new Date(venta.fecha).toLocaleString('es-CO') : 'N/A';
+        document.getElementById('detalleTotal').innerText = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(venta.total || 0);
 
-        // 3. LLENAR DATOS DE LA CABECERA (Soporta minúsculas y mayúsculas comunes)
-        document.getElementById('tituloModalFactura').innerText = `Factura #${data.id || idVenta}`;
-        document.getElementById('detalleCliente').innerText = data.nombre_cliente || data.cliente || data.Cliente || 'N/A';
-        document.getElementById('detalleFecha').innerText = data.fecha || data.Fecha ? new Date(data.fecha || data.Fecha).toLocaleString('es-CO') : 'N/A';
-        document.getElementById('detalleTotal').innerText = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(data.total || data.Total || 0);
-
-        // 4. PROCESAR PRODUCTOS VINCULADOS
-        const items = data.items || data.productos || data.Productos || [];
+        // 2. PROCESAR PRODUCTOS VINCULADOS (Usando el bloque 'detalle')
         const tbodyItems = document.getElementById('tablaDetalleItems');
         
         if (tbodyItems) {
             tbodyItems.innerHTML = '';
             
-            if (items && items.length > 0) {
-                items.forEach(item => {
-                    // Soporta variaciones comunes de nombres de columnas
+            if (detalles && detalles.length > 0) {
+                detalles.forEach(item => {
                     const nombreProd = item.nombre_producto || item.producto || item.nombre || 'Desconocido';
-                    const cantidad = item.cantidad || item.Cant || 0;
+                    const cantidad = item.cantidad || 0;
                     const precio = item.precio_unitario || item.precio || 0;
                     const subtotal = item.subtotal || (cantidad * precio);
 
@@ -122,7 +111,7 @@ async function verDetalle(idVenta) {
                     `;
                 });
             } else {
-                tbodyItems.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No se encontraron productos vinculados en esta estructura.</td></tr>`;
+                tbodyItems.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No se encontraron productos vinculados en esta factura.</td></tr>`;
             }
         }
 
@@ -130,6 +119,6 @@ async function verDetalle(idVenta) {
 
     } catch (error) {
         console.error("Error en JS:", error);
-        alert("Error en el navegador:\n" + error.message);
+        alert("Ocurrió un error al procesar los datos de la factura.");
     }
 }
