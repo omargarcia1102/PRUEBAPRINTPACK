@@ -3,21 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Clientes - Sistema ERP</title>
+    <title>PrintPack - Módulo</title>
+    <!-- Tus fuentes -->
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Bootstrap para las tablas (déjalo arriba) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    
+    <!-- TU ESTILO CORPORATIVO (Abajo para que mande sobre Bootstrap) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
 </head>
-<body class="bg-light">
+<body>
 
-<nav class="navbar navbar-dark bg-dark mb-4">
-    <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1"><i class="bi bi-people"></i> Directorio de Clientes</span>
-        <div>
-            <a href="/ventas" class="btn btn-outline-info btn-sm me-2">Ir a Ventas</a>
-            <a href="/" class="btn btn-outline-light btn-sm">Volver al Inicio</a>
+    <!-- TU HEADER EXACTO DE PRINTPACK -->
+    <header>
+        <div class="logo">
+            <a href="{{ url_for('main.inicio') }}">
+                <img src="https://printpackcaribe.com/wp-content/uploads/2025/08/ECOBOLSAS-CARIBE-PRINTPACK-LOGOS-4-scaled-324x141.png" alt="PrintPack Caribe">
+            </a>
         </div>
-    </div>
-</nav>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('main.inicio') }}">Inicio</a></li>
+                <li><a href="{{ url_for('main.procesos') }}">Procesos</a></li>
+                <li><a href="{{ url_for('main.productos') }}">Productos</a></li>
+                <li><a href="{{ url_for('main.contacto') }}">Contáctanos</a></li>
+                <!-- Este es el botón que lo llevará al Dashboard -->
+                <li><a href="#" class="active">Panel ERP</a></li> 
+            </ul>
+        </nav>
+        <a href="{{ url_for('main.logout') }}" id="auth-button" class="btn-nav">Cerrar Sesión</a>
+    </header>
+
+    <main class="py-5">
+        <!-- AQUÍ DEBES DEJAR EL <div class="container"> QUE YA TIENEN TUS VISTAS CON LAS TABLAS -->
 
 <div class="container">
     <div class="card shadow-sm">
@@ -88,5 +109,13 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{{ url_for('static', filename='js/clientes.js') }}"></script>
+
+        </main>
+
+    <footer>
+        <p class="copyright" style="border:none; margin:0; padding:0;">
+            Copyright © 2025 PrintPack Caribe - Panel Administrativo
+        </p>
+    </footer>
 </body>
 </html>
