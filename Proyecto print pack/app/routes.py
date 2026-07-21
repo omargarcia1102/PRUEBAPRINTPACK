@@ -529,61 +529,6 @@ def vista_historial_ventas():
     return render_template('HISTORIAL_VENTAS.html')
 
 
-# 2. API EN PUNTO GET: TRAER TODAS LAS VENTAS
-@main.route('/api/ventas', methods=['GET'])
-def obtener_todas_las_ventas():
-    try:
-        conexion = obtener_conexion() 
-        with conexion.cursor(dictionary=True) as cursor:
-            query = """
-                SELECT v.id, v.fecha, v.total, v.notas, c.nombre AS nombre_cliente 
-                FROM ventas v
-                JOIN clientes c ON v.id_cliente = c.id
-                ORDER BY v.fecha DESC
-            """
-            cursor.execute(query)
-            ventas = cursor.fetchall()
-        conexion.close()
-        return jsonify(ventas), 200
-    except Exception as e:
-        return jsonify({"ok": False, "mensaje": str(e)}), 500
-
-
-# 3. API EN PUNTO GET: TRAER EL DETALLE DE UNA FACTURA ESPECÍFICA
-@main.route('/api/ventas/<int:id_venta>', methods=['GET'])
-def obtener_detalle_factura(id_venta):
-    try:
-        conexion = obtener_conexion()
-        with conexion.cursor(dictionary=True) as cursor:
-            query_venta = """
-                SELECT v.id, v.fecha, v.total, c.nombre AS nombre_cliente 
-                FROM ventas v
-                JOIN clientes c ON v.id_cliente = c.id
-                WHERE v.id = %s
-            """
-            cursor.execute(query_venta, (id_venta,))
-            venta = cursor.fetchone()
-
-            if not venta:
-                return jsonify({"ok": False, "mensaje": "Factura no encontrada"}), 404
-
-            query_items = """
-                SELECT p.nombre AS nombre_producto, dv.cantidad, dv.precio_unitario, (dv.cantidad * dv.precio_unitario) AS subtotal
-                FROM detalle_ventas dv
-                JOIN productos p ON dv.id_producto = p.id
-                WHERE dv.id_venta = %s
-            """
-            cursor.execute(query_items, (id_venta,))
-            items = cursor.fetchall()
-
-            venta['items'] = items
-
-        conexion.close()
-        return jsonify(venta), 200
-    except Exception as e:
-        return jsonify({"ok": False, "mensaje": str(e)}), 500
-
-
 @main.route('/clientes')
 def clientes_vista():
     if session.get('rol') not in ['admin', 'asesor']:
