@@ -312,10 +312,12 @@ def get_movimientos():
     """)
     resultado = cursor.fetchall()
     cursor.close()
-   
+    
     for row in resultado:
         if row.get('fecha'):
-            row['fecha'] = row['fecha'].strftime('%Y-%m-%d %H:%M:%S')
+            fecha_local = row['fecha'] - timedelta(hours=5)
+            row['fecha'] = fecha_local.strftime('%Y-%m-%d %I:%M:%S %p')
+            
     return jsonify(resultado)
     
 
