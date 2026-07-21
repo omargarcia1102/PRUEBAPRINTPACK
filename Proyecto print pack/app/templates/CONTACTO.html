@@ -25,7 +25,7 @@
                 <li><a href="{{ url_for('main.inicio') }}">Inicio</a></li>
                 <li><a href="{{ url_for('main.procesos') }}">Procesos</a></li>
                 <li><a href="{{ url_for('main.productos') }}">Productos</a></li>
-                <li><a href="{{ url_for('main.contacto') }}">Contáctanos</a></li>
+                <li><a href="{{ url_for('main.contacto') }}" class="active">Contáctanos</a></li>
                 
                 <!-- Enlaces privados (Jinja2 los muestra solo si hay sesión) -->
                 {% if session.get('rol') %}
