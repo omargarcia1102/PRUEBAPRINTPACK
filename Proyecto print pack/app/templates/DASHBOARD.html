@@ -7,44 +7,12 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/DASHBOARDCSS.css') }}">
     
     <!-- Tu base corporativa -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     <!-- Reutilizamos el CSS de Inicio para las tarjetas -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/INICIOCSS.css') }}">
-
-    <style>
-        /* Pequeños ajustes exclusivos para el Dashboard */
-        .dashboard-header {
-            background: var(--dark);
-            padding: 60px 48px;
-            text-align: center;
-        }
-        .dashboard-header h1 {
-            color: #fff;
-            font-size: 2.8em;
-            margin-bottom: 10px;
-        }
-        .dashboard-header p {
-            color: #a7abb8;
-            font-size: 1.1em;
-        }
-        .card-erp-link {
-            text-decoration: none;
-            display: block;
-            color: inherit;
-        }
-        .card-erp-link:hover .highlight-card {
-            background: var(--blue-tint);
-            border-color: var(--blue);
-            transform: translateY(-6px);
-        }
-        .card-erp-link:hover .highlight-card i {
-            background: var(--dark);
-        }
-        /* Ocultar tarjeta de usuarios a asesores */
-        .admin-only { display: none; }
-    </style>
 </head>
 <body>
 
@@ -134,28 +102,8 @@
         </p>
     </footer>
 
-    
-    <!-- Script para ocultar la gestión de usuarios a los asesores -->
-    <script>
-        document.addEventListener("DOMContentLoaded", async () => {
-            try {
-                const res = await fetch('/api/sesion');
-                const sesion = await res.json();
+<script src="{{ url_for('static', filename='js/DASHBOARDJS.js') }}"></script>
 
-                if (sesion.activo) {
-                    // Cambiamos el saludo si tienes el nombre del usuario
-                    document.getElementById('saludo-usuario').innerText = `Bienvenido al sistema de gestión, ${sesion.usuario || ''}`;
-                    
-                    // Si es admin, le quitamos la clase que oculta la tarjeta de usuarios
-                    if (sesion.rol === 'admin') {
-                        document.getElementById('card-usuarios').classList.remove('admin-only');
-                    }
-                }
-            } catch (error) {
-                console.error("Error cargando perfil", error);
-            }
-        });
-    </script>
 
 </body>
 </html>
