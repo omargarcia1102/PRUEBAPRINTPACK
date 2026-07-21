@@ -393,7 +393,7 @@ def get_ventas():
             # Formato: YYYY-MM-DD HH:MM AM/PM
             row['fecha'] = fecha_local.strftime('%Y-%m-%d %I:%M %p')
             
-    return jsonify(resultado))
+    return jsonify(resultado)
 
 @main.route('/api/ventas', methods=['POST'])
 def crear_venta():
