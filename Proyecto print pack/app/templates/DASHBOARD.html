@@ -65,7 +65,7 @@
             
             <div class="highlights-grid">
                 
-                <!-- MÓDULO VENTAS -->
+                <!-- MÓDULO VENTAS (Visible para todos) -->
                 <a href="/ventas" class="card-erp-link">
                     <div class="highlight-card">
                         <i class="fa-solid fa-cart-shopping"></i>
@@ -74,8 +74,8 @@
                     </div>
                 </a>
 
-                <!-- MÓDULO HISTORIAL -->
-                <a href="/historial-ventas" class="card-erp-link">
+                <!-- MÓDULO HISTORIAL (Visible para todos) -->
+                <a href="/historial_ventas" class="card-erp-link">
                     <div class="highlight-card">
                         <i class="fa-solid fa-receipt"></i>
                         <h3>Historial de Ventas</h3>
@@ -83,7 +83,7 @@
                     </div>
                 </a>
 
-                <!-- MÓDULO CLIENTES -->
+                <!-- MÓDULO CLIENTES (Visible para todos) -->
                 <a href="/clientes" class="card-erp-link">
                     <div class="highlight-card">
                         <i class="fa-solid fa-users"></i>
@@ -92,23 +92,31 @@
                     </div>
                 </a>
 
-                <!-- MÓDULO INVENTARIO -->
-                <a href="{{ url_for('main.inventario') }}" class="card-erp-link">
-                    <div class="highlight-card">
-                        <i class="fa-solid fa-boxes-stacked"></i>
-                        <h3>Control de Inventario</h3>
-                        <p>Gestión de mercancía, entradas, salidas y control de existencias en tiempo real.</p>
-                    </div>
-                </a>
+                <!-- ========================================== -->
+                <!-- MÓDULOS RESTRINGIDOS: SOLO PARA EL ADMIN   -->
+                <!-- ========================================== -->
+                {% if session.get('rol') == 'admin' %}
 
-                <!-- MÓDULO USUARIOS (Solo Admin) -->
-                <a href="/usuarios" class="card-erp-link admin-only" id="card-usuarios">
-                    <div class="highlight-card" style="border-left: 4px solid var(--red);">
-                        <i class="fa-solid fa-shield-halved" style="background: var(--red);"></i>
-                        <h3>Gestión de Usuarios</h3>
-                        <p>Panel de seguridad. Creación de perfiles, asignación de roles y control de accesos.</p>
-                    </div>
-                </a>
+                    <!-- MÓDULO INVENTARIO -->
+                    <a href="{{ url_for('main.inventario') }}" class="card-erp-link">
+                        <div class="highlight-card">
+                            <i class="fa-solid fa-boxes-stacked"></i>
+                            <h3>Control de Inventario</h3>
+                            <p>Gestión de mercancía, entradas, salidas y control de existencias en tiempo real.</p>
+                        </div>
+                    </a>
+
+                    <!-- MÓDULO USUARIOS -->
+                    <!-- Ya no necesita el id="card-usuarios" ni la clase "admin-only" porque Jinja2 lo controla -->
+                    <a href="/usuarios" class="card-erp-link">
+                        <div class="highlight-card" style="border-left: 4px solid var(--red);">
+                            <i class="fa-solid fa-shield-halved" style="background: var(--red);"></i>
+                            <h3>Gestión de Usuarios</h3>
+                            <p>Panel de seguridad. Creación de perfiles, asignación de roles y control de accesos.</p>
+                        </div>
+                    </a>
+
+                {% endif %}
 
             </div>
         </section>
