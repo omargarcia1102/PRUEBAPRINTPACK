@@ -62,10 +62,18 @@
         <!-- AQUÍ DEBES DEJAR EL <div class="container"> QUE YA TIENEN TUS VISTAS CON LAS TABLAS -->
 
 <div class="container">
-    <!-- PEGA ESTE BOTÓN AQUÍ ARRIBA -->
-            <a href="{{ url_for('main.dashboard') }}" class="btn-back-erp">
-                <i class="fa-solid fa-arrow-left"></i> Volver al Panel ERP
-            </a>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+                
+                <!-- Botón de volver -->
+                <a href="{{ url_for('main.dashboard') }}" class="btn-back-erp" style="margin-bottom: 0;">
+                    <i class="fa-solid fa-arrow-left"></i> Volver al Panel ERP
+                </a>
+                
+                <!-- Botón de Excel recuperado -->
+                <a href="/api/exportar/ventas" class="btn btn-success shadow-sm" style="background-color: #1c7a3d; border: none; font-weight: 600;">
+                    <i class="fa-solid fa-file-excel"></i> Exportar a Excel
+                </a>
+        </div>
     <h2>Historial De Ventas</h2>
     <div class="card shadow-sm">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
