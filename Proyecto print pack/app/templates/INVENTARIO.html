@@ -31,7 +31,7 @@
                     
                     <!-- Solo el Admin ve el botón de Inventario directo -->
                     {% if session.get('rol') == 'admin' %}
-                        <li><a href="{{ url_for('main.inventario') }}">Inventario</a></li>
+                        <li><a href="{{ url_for('main.inventario') }}" class="active">Inventario</a></li>
                     {% endif %}
 
                     <!-- Ambos (Admin y Asesor) ven el Panel ERP -->
