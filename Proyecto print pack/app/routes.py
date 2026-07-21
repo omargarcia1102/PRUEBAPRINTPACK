@@ -776,12 +776,16 @@ def exportar_ventas():
             celda.font = openpyxl.styles.Font(bold=True)
 
         # Llenar los datos fila por fila
+        # Llenar los datos fila por fila
         for v in ventas:
-            # Formatear la fecha para que se vea limpia en Excel
-            fecha_limpia = v.get('fecha').strftime('%Y-%m-%d %H:%M') if v.get('fecha') else 'N/A'
+            if v.get('fecha'):
+                fecha_local = v.get('fecha') - timedelta(hours=5)
+                fecha_limpia = fecha_local.strftime('%Y-%m-%d %I:%M %p')
+            else:
+                fecha_limpia = 'N/A'
             
             ws.append([
-                v.get('numero_factura'), # Ahora mostrará "FAC-2026-6116"
+                v.get('numero_factura'), 
                 v.get('nombre_cliente') or 'Cliente Mostrador', 
                 fecha_limpia, 
                 v.get('total')
