@@ -383,10 +383,15 @@ def get_ventas():
     """)
     resultado = cursor.fetchall()
     cursor.close()
+    
     for row in resultado:
         if row.get('fecha'):
-            row['fecha'] = row['fecha'].strftime('%Y-%m-%d %H:%M:%S')
-    return jsonify(resultado)
+            # Restamos 5 horas (Hora Colombia)
+            fecha_local = row['fecha'] - timedelta(hours=5)
+            # Formato: YYYY-MM-DD HH:MM AM/PM
+            row['fecha'] = fecha_local.strftime('%Y-%m-%d %I:%M %p')
+            
+    return jsonify(resultado))
 
 @main.route('/api/ventas', methods=['POST'])
 def crear_venta():
@@ -506,7 +511,9 @@ def get_venta_detalle(id):
     cursor.close()
 
     if venta.get('fecha'):
-        venta['fecha'] = venta['fecha'].strftime('%Y-%m-%d %H:%M:%S')
+        # Restamos 5 horas al detalle
+        fecha_local = venta['fecha'] - timedelta(hours=5)
+        venta['fecha'] = fecha_local.strftime('%Y-%m-%d %I:%M %p')
 
     return jsonify({'venta': venta, 'detalle': detalle})
 
