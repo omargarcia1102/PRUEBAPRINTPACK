@@ -16,23 +16,32 @@
 
     <header>
         <div class="logo">
-            <a href={{ url_for('main.inicio') }} >
+            <a href="{{ url_for('main.inicio') }}">
                 <img src="https://printpackcaribe.com/wp-content/uploads/2025/08/ECOBOLSAS-CARIBE-PRINTPACK-LOGOS-4-scaled-324x141.png" alt="PrintPack Caribe">
             </a>
         </div>
-
         <nav>
             <ul>
-                <li><a href={{ url_for('main.inicio') }} class="active">Inicio</a></li>
-                <li><a href={{ url_for('main.procesos') }}>Procesos</a></li>
-                <li><a href={{ url_for('main.productos') }}>Productos</a></li>
-                <li><a href={{ url_for('main.contacto') }}>Contáctanos</a></li>
-                <li id="inventario-link" style="display: none;"><a href={{ url_for('main.inventario') }}>Inventario</a></li>
-                <li id="panel-erp-link" style="display: none;"><a href="{{ url_for('main.dashboard') }}">Panel ERP</a></li>
+                <!-- Enlaces públicos -->
+                <li><a href="{{ url_for('main.inicio') }}">Inicio</a></li>
+                <li><a href="{{ url_for('main.procesos') }}">Procesos</a></li>
+                <li><a href="{{ url_for('main.productos') }}">Productos</a></li>
+                <li><a href="{{ url_for('main.contacto') }}">Contáctanos</a></li>
+                
+                <!-- Enlaces privados (Jinja2 los muestra solo si hay sesión) -->
+                {% if session.get('rol') %}
+                    <li><a href="{{ url_for('main.inventario') }}">Inventario</a></li>
+                    <li><a href="{{ url_for('main.dashboard') }}">Panel ERP</a></li>
+                {% endif %}
             </ul>
         </nav>
 
-        <a href={{ url_for('main.acceder') }} id="auth-button" class="btn-nav">Acceder</a>
+        <!-- Botón dinámico: Cambia automáticamente sin usar JavaScript -->
+        {% if session.get('rol') %}
+            <a href="{{ url_for('main.logout') }}" class="btn-nav">Cerrar Sesión ({{ session.get('rol') | upper }})</a>
+        {% else %}
+            <a href="{{ url_for('main.acceder') }}" class="btn-nav">Acceder</a>
+        {% endif %}
     </header>
 
     <main>
