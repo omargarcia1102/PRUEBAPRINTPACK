@@ -18,14 +18,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (data.ok) {
                 alert("¡Bienvenido!");
-                // Redirige según el rol
-                if (data.rol === 'admin') {
-                    window.location.href = "/";
-                } else if (data.rol === 'asesor') {
-                    window.location.href = "/ventas";
-                } else {
-                    window.location.href = "/";
-                }
+                // Redirige a la página de Inicio sin importar el rol
+                window.location.href = "/";
             } else {
                 alert(data.mensaje || "Credenciales incorrectas");
             }
