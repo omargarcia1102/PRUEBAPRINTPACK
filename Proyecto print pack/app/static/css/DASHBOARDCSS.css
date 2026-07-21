@@ -1,0 +1,30 @@
+/* Pequeños ajustes exclusivos para el Dashboard */
+.dashboard-header {
+    background: var(--dark);
+    padding: 60px 48px;
+    text-align: center;
+}
+.dashboard-header h1 {
+    color: #fff;
+    font-size: 2.8em;
+    margin-bottom: 10px;
+}
+.dashboard-header p {
+    color: #a7abb8;
+    font-size: 1.1em;
+}
+.card-erp-link {
+    text-decoration: none;
+    display: block;
+    color: inherit;
+}
+.card-erp-link:hover .highlight-card {
+    background: var(--blue-tint);
+    border-color: var(--blue);
+    transform: translateY(-6px);
+}
+.card-erp-link:hover .highlight-card i {
+    background: var(--dark);
+}
+/* Ocultar tarjeta de usuarios a asesores */
+.admin-only { display: none; }
