@@ -29,15 +29,26 @@
         </div>
         <nav>
             <ul>
+                <!-- Enlaces públicos -->
                 <li><a href="{{ url_for('main.inicio') }}">Inicio</a></li>
                 <li><a href="{{ url_for('main.procesos') }}">Procesos</a></li>
                 <li><a href="{{ url_for('main.productos') }}">Productos</a></li>
                 <li><a href="{{ url_for('main.contacto') }}">Contáctanos</a></li>
-                <!-- Este es el botón que lo llevará al Dashboard -->
-                <li><a href="#" class="active">Panel ERP</a></li> 
+                
+                <!-- Enlaces privados (Jinja2 los muestra solo si hay sesión) -->
+                {% if session.get('rol') %}
+                    <li><a href="{{ url_for('main.inventario') }}">Inventario</a></li>
+                    <li><a href="{{ url_for('main.dashboard') }}">Panel ERP</a></li>
+                {% endif %}
             </ul>
         </nav>
-        <a href="{{ url_for('main.logout') }}" id="auth-button" class="btn-nav">Cerrar Sesión</a>
+
+        <!-- Botón dinámico: Cambia automáticamente sin usar JavaScript -->
+        {% if session.get('rol') %}
+            <a href="{{ url_for('main.logout') }}" class="btn-nav">Cerrar Sesión ({{ session.get('rol') | upper }})</a>
+        {% else %}
+            <a href="{{ url_for('main.acceder') }}" class="btn-nav">Acceder</a>
+        {% endif %}
     </header>
 
     <main class="py-5">
