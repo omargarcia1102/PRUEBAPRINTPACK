@@ -26,12 +26,20 @@
                 <li><a href="{{ url_for('main.procesos') }}">Procesos</a></li>
                 <li><a href="{{ url_for('main.productos') }}">Productos</a></li>
                 <li><a href="{{ url_for('main.contacto') }}" class="active">Contáctanos</a></li>
-                
-                <!-- Enlaces privados (Jinja2 los muestra solo si hay sesión) -->
+
+                <!-- Enlaces privados -->
                 {% if session.get('rol') %}
-                    <li><a href="{{ url_for('main.inventario') }}">Inventario</a></li>
+                    
+                    <!-- Solo el Admin ve el botón de Inventario directo -->
+                    {% if session.get('rol') == 'admin' %}
+                        <li><a href="{{ url_for('main.inventario') }}">Inventario</a></li>
+                    {% endif %}
+
+                    <!-- Ambos (Admin y Asesor) ven el Panel ERP -->
                     <li><a href="{{ url_for('main.dashboard') }}">Panel ERP</a></li>
+                    
                 {% endif %}
+               
             </ul>
         </nav>
 
