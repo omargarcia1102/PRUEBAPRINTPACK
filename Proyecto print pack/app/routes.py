@@ -120,10 +120,13 @@ def login():
 # LOGOUT
 @main.route('/logout')
 def logout():
-    session.pop('usuario', None)
-    session.pop('es_admin', None)
-    session.modified = True
+    # 1. Destruye absolutamente todas las variables de la sesión (usuario, rol, es_admin)
+    session.clear()
+    
+    # 2. Redirige al inicio
     response = redirect(url_for('main.inicio'))
+    
+    # 3. Elimina la cookie del navegador por seguridad extra
     response.delete_cookie('session', path='/')
     return response
 
