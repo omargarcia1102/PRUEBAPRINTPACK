@@ -9,9 +9,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/DASHBOARDCSS.css') }}">
     
-    <!-- Tu base corporativa -->
+    <!-- base corporativa -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-    <!-- Reutilizamos el CSS de Inicio para las tarjetas -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/erp.css') }}">
+    <!-- Reutiliza el CSS de Inicio para las tarjetas -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/INICIOCSS.css') }}">
 </head>
 <body>
@@ -110,7 +111,7 @@
                     </a>
 
                     <!-- MÓDULO USUARIOS -->
-                    <!-- Ya no necesita el id="card-usuarios" ni la clase "admin-only" porque Jinja2 lo controla -->
+                   
                     <a href="/usuarios" class="card-erp-link">
                         <div class="highlight-card" style="border-left: 4px solid var(--red);">
                             <i class="fa-solid fa-shield-halved" style="background: var(--red);"></i>
