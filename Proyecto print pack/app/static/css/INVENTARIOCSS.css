@@ -64,6 +64,20 @@ main{
 
 .admin-options a.option-active i{ color: var(--blue); }
 
+.admin-options hr{ border: none; border-top: 1px solid var(--line); margin: 8px 0; }
+
+.admin-options a.link-excel{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 0.88em;
+    font-weight: 700;
+    color: #1c7a3d;
+}
+.admin-options a.link-excel:hover{ background: #e5f5ea; }
+
 
 .inventario-main{ display: flex; flex-direction: column; gap: 22px; }
 
@@ -400,6 +414,19 @@ main{
         border-bottom: 3px solid transparent;
     }
     .admin-options a.option-active{ border-left: none; border-bottom-color: var(--blue); }
+
+    .admin-options hr{
+        border: none;
+        border-left: 1px solid var(--line);
+        width: 1px;
+        height: 32px;
+        margin: 0 2px;
+        flex: 0 0 auto;
+    }
+    .admin-options a.link-excel{
+        white-space: nowrap;
+        border-bottom: 3px solid transparent;
+    }
 
     .inventario-stats{ grid-template-columns: 1fr 1fr; gap: 10px; }
     .stat-card{ padding: 14px 16px; }
