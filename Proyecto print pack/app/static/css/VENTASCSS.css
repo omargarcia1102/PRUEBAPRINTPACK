@@ -1,1 +1,83 @@
+/* ==========================================
+   MÓDULO DE VENTAS (POS) - PRINTPACK
+   ========================================== */
 
+/* Tarjetas del panel de ventas */
+.card {
+    border: none !important;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06) !important;
+}
+
+.card-header {
+    background-color: var(--dark) !important;
+    color: white !important;
+    font-weight: 600;
+    border-radius: 12px 12px 0 0 !important;
+    padding: 1rem 1.5rem;
+}
+
+/* Buscador de productos */
+.form-control, .form-select {
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    padding: 0.6rem 1rem;
+}
+.form-control:focus, .form-select:focus {
+    border-color: var(--red);
+    box-shadow: 0 0 0 0.25rem rgba(198, 30, 30, 0.15);
+}
+
+/* Tabla del Carrito */
+.table thead th {
+    background-color: #f3f4f6 !important;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: #4b5563;
+    border-bottom: 2px solid #e5e7eb;
+}
+.table tbody td { vertical-align: middle; }
+
+/* Panel de Total a Pagar */
+.panel-total {
+    background-color: #f9fafb;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    border: 1px solid #e5e7eb;
+    text-align: right;
+}
+
+.texto-total {
+    font-size: 1.2rem;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.monto-total {
+    font-size: 2.5rem;
+    font-family: 'Archivo Black', sans-serif;
+    color: var(--red);
+    margin: 0;
+    line-height: 1.1;
+}
+
+/* Botón gigante de Facturar */
+.btn-facturar {
+    background-color: var(--red) !important;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 700;
+    width: 100%;
+    padding: 1rem;
+    border-radius: 8px;
+    border: none;
+    margin-top: 1rem;
+    transition: all 0.2s;
+}
+
+.btn-facturar:hover {
+    background-color: #a81717 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(198, 30, 30, 0.2);
+}
