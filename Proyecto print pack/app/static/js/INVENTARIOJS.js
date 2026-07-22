@@ -180,10 +180,23 @@ async function confirmarEliminacion() {
 
     const p = productos.find(x => x.id == id);
     if (confirm(`¿Seguro que quieres eliminar ${p.nombre}?`)) {
-        const res = await fetch(`/api/productos/${id}`, { method: 'DELETE' });
-        if (res.ok) {
-            alert("Eliminado correctamente");
-            await cargarProductos();
+        try {
+            const res = await fetch(`/api/productos/${id}`, { method: 'DELETE' });
+            
+            // 1. Extraemos los datos que nos envía Python (incluyendo el mensaje de error)
+            const data = await res.json(); 
+
+            // 2. Evaluamos la respuesta
+            if (res.ok) {
+                alert("Eliminado correctamente");
+                await cargarProductos();
+            } else {
+                // 3. ¡Aquí mostramos la advertencia roja de las facturas!
+                alert(data.mensaje || "No se pudo eliminar el producto.");
+            }
+        } catch (error) {
+            console.error("Error en la solicitud:", error);
+            alert("Ocurrió un error de conexión con el servidor.");
         }
     }
 }
