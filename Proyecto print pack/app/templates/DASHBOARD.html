@@ -56,7 +56,10 @@
     <main>
         <section class="dashboard-header">
             <h1>Centro de Control ERP</h1>
-            <p id="saludo-usuario">Sistema de gestión de PrintPack Caribe</p>
+            <!-- Usamos Jinja2 para poner el nombre instantáneamente, con la primera letra en mayúscula -->
+            <p style="color: #9ca3af; font-size: 1.2rem;">
+            Bienvenido al sistema de gestión, <strong style="color: white;">{{ session.get('usuario') | capitalize }}</strong>
+        </p>
         </section>
 
         <section class="highlights" style="padding-top: 50px;">
