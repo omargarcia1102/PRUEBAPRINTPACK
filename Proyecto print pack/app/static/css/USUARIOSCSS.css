@@ -1,1 +1,82 @@
+/* ==========================================
+   ESTILOS DEL MÓDULO DE USUARIOS (ERP)
+   ========================================== */
 
+/* Estilo de la tarjeta principal */
+.card {
+    border: none !important;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06) !important;
+    overflow: hidden;
+}
+
+/* Cabecera oscura corporativa */
+.card-header.bg-dark {
+    background-color: var(--dark) !important; /* Usa el color oscuro de tu base.css */
+    color: white !important;
+    border-bottom: none;
+    padding: 1.2rem 1.5rem;
+}
+
+/* Botones rojos de PrintPack */
+.btn-danger {
+    background-color: var(--red) !important; 
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.btn-danger:hover {
+    background-color: #a81717 !important; /* Rojo más oscuro al pasar el mouse */
+    transform: translateY(-2px);
+}
+
+/* Diseño de la tabla */
+.table {
+    margin-bottom: 0;
+}
+
+.table thead th {
+    background-color: #f3f4f6 !important;
+    color: #374151;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #e5e7eb;
+    padding: 1rem;
+}
+
+.table tbody td {
+    padding: 1rem;
+    vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f9fafb !important;
+}
+
+/* Etiquetas de estado (Activo/Inactivo) */
+.badge {
+    padding: 0.5em 0.8em;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+/* Estilos del Modal (Ventana emergente) */
+.modal-content {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+    background-color: var(--dark) !important;
+    border-radius: 12px 12px 0 0;
+    border-bottom: none;
+}
+
+.form-label {
+    color: #4b5563;
+}
