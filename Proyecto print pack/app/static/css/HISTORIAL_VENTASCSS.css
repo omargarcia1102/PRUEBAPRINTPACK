@@ -1,1 +1,63 @@
+/* ==========================================
+   MÓDULO DE HISTORIAL DE VENTAS - PRINTPACK
+   ========================================== */
 
+.card {
+    border: none !important;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06) !important;
+}
+
+/* Tablas */
+.table { margin-bottom: 0; }
+.table thead th {
+    background-color: #f3f4f6 !important;
+    color: #374151;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    border-bottom: 2px solid #e5e7eb;
+    padding: 1rem;
+}
+.table tbody td {
+    padding: 1rem;
+    vertical-align: middle;
+}
+
+/* Botón de Excel (Verde corporativo) */
+.btn-success {
+    background-color: #1c7a3d !important;
+    border: none !important;
+    border-radius: 6px;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    transition: all 0.2s;
+}
+
+.btn-success:hover {
+    background-color: #145c2e !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(28, 122, 61, 0.3);
+}
+
+/* Botones de acción en la tabla (Ver detalle) */
+.btn-info {
+    background-color: #e0f2fe !important;
+    color: #0369a1 !important;
+    border: none;
+    font-weight: 600;
+}
+.btn-info:hover { background-color: #bae6fd !important; }
+
+/* Detalle de factura en el modal (Estilo Ticket) */
+.modal-content { border-radius: 12px; border: none; }
+.modal-header { background-color: var(--dark) !important; }
+.ticket-total {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--red);
+    text-align: right;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 2px dashed #ccc;
+}
