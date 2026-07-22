@@ -261,46 +261,64 @@ def actualizar_producto(id):
 def eliminar_producto(id):
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
-   
-    cursor.execute("SELECT nombre, stock FROM productos WHERE id=%s", (id,))
-    producto = cursor.fetchone()
-    nombre_producto = producto['nombre'] if producto else ''
-    stock_actual = producto['stock'] if producto else 0
+    try:
+        # Obtener información antes de borrar
+        cursor.execute("SELECT nombre, stock FROM productos WHERE id=%s", (id,))
+        producto = cursor.fetchone()
+        nombre_producto = producto['nombre'] if producto else ''
+        stock_actual = producto['stock'] if producto else 0
 
-   
-    cursor.execute("""
-        INSERT INTO movimientos 
-        (id_producto, nombre_producto, tipo_movimiento, usuario, detalle, stock_anterior, stock_nuevo)
-        VALUES (%s, %s, 'ELIMINAR', %s, %s, %s, %s)
-    """, (
-        id,
-        nombre_producto,
-        session.get('usuario'),
-        "Producto eliminado del inventario",
-        stock_actual,
-        0
-    ))
+        # Intentar eliminar (Aquí es donde MySQL bloqueará si hay ventas previas)
+        cursor.execute("DELETE FROM productos WHERE id=%s", (id,))
 
-    
-    cursor.execute("DELETE FROM productos WHERE id=%s", (id,))
-    alerta = nivel_stock(0)
-    mensaje = (
-        f"🔴 <b>PRODUCTO ELIMINADO</b>\n"
-        f"━━━━━━━━━━━━━━━━━━━━\n"
-        f"📦 <b>Producto:</b> {nombre_producto}\n"
-        f"👤 <b>Usuario:</b> {session.get('usuario')}\n"
-        f"🏷️ <b>Tipo movimiento:</b> ELIMINAR\n"
-        f"📊 <b>Stock eliminado:</b> {stock_actual} unidades\n"
-        f"📍 <b>Bodega:</b> No disponible (eliminado)\n"
-        f"⏰ <b>Hora:</b> {hora_colombia()}\n"
-        f"━━━━━━━━━━━━━━━━━━━━\n"
-        f"🔴 PRODUCTO FUERA DEL SISTEMA"
+        # Si logra pasar (no tiene ventas), guardamos el movimiento
+        cursor.execute("""
+            INSERT INTO movimientos 
+            (id_producto, nombre_producto, tipo_movimiento, usuario, detalle, stock_anterior, stock_nuevo)
+            VALUES (%s, %s, 'ELIMINAR', %s, %s, %s, %s)
+        """, (
+            id,
+            nombre_producto,
+            session.get('usuario'),
+            "Producto eliminado del inventario",
+            stock_actual,
+            0
+        ))
+        
+        # Notificación Telegram
+        alerta = nivel_stock(0)
+        mensaje = (
+            f"🔴 <b>PRODUCTO ELIMINADO</b>\n"
+            f"━━━━━━━━━━━━━━━━━━━━\n"
+            f"📦 <b>Producto:</b> {nombre_producto}\n"
+            f"👤 <b>Usuario:</b> {session.get('usuario')}\n"
+            f"🏷️ <b>Tipo movimiento:</b> ELIMINAR\n"
+            f"📊 <b>Stock eliminado:</b> {stock_actual} unidades\n"
+            f"📍 <b>Bodega:</b> No disponible (eliminado)\n"
+            f"⏰ <b>Hora:</b> {hora_colombia()}\n"
+            f"━━━━━━━━━━━━━━━━━━━━\n"
+            f"🔴 PRODUCTO FUERA DEL SISTEMA"
         )
-    enviar_telegram(mensaje)
+        enviar_telegram(mensaje)
 
-    mysql.connection.commit()
-    cursor.close()
-    return jsonify({'ok': True})
+        mysql.connection.commit()
+        cursor.close()
+        return jsonify({'ok': True})
+
+    except MySQLdb.IntegrityError:
+        # ERROR 1451: El producto está en detalle_ventas
+        mysql.connection.rollback()
+        cursor.close()
+        return jsonify({
+            'ok': False, 
+            'mensaje': f'El producto "{nombre_producto}" no se puede eliminar porque ya tiene facturas generadas. Para retirarlo, edítelo y deje su stock en 0.'
+        }), 400
+
+    except Exception as e:
+        # Cualquier otro error imprevisto
+        mysql.connection.rollback()
+        cursor.close()
+        return jsonify({'ok': False, 'mensaje': str(e)}), 500
 
 @main.route('/api/movimientos', methods=['GET'])
 def get_movimientos():
