@@ -28,6 +28,12 @@
 
 html{ scroll-behavior: smooth; }
 
+html, body{
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+}
+
 body{
     min-height: 100vh;
     font-family: 'Poppins', sans-serif;
@@ -36,6 +42,8 @@ body{
     display: flex;
     flex-direction: column;
 }
+
+img{ max-width: 100%; height: auto; }
 
 a{ color: inherit; }
 
