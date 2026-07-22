@@ -782,3 +782,49 @@ def dashboard():
     if not session.get('rol'):
         return redirect(url_for('main.acceder'))
     return render_template('DASHBOARD.html')
+
+
+
+
+# ==========================================
+# RUTA TEMPORAL PARA RESETEO DE FÁBRICA
+# ¡BORRAR DESPUÉS DE USAR!
+# ==========================================
+@main.route('/limpieza-extrema-sistema')
+def limpieza_extrema():
+    # Solo el admin puede ejecutar esto
+    if session.get('rol') != 'admin':
+        return "No autorizado", 401
+        
+    cursor = mysql.connection.cursor()
+    try:
+        # 1. Apagamos las restricciones de llaves foráneas temporalmente
+        cursor.execute("SET FOREIGN_KEY_CHECKS = 0;")
+        
+        # 2. Vaciamos las tablas y reiniciamos los IDs a 1 (TRUNCATE hace esto)
+        cursor.execute("TRUNCATE TABLE detalle_ventas;")
+        cursor.execute("TRUNCATE TABLE ventas;")
+        cursor.execute("TRUNCATE TABLE movimientos;")
+        cursor.execute("TRUNCATE TABLE productos;")
+        cursor.execute("TRUNCATE TABLE clientes;")
+        
+        # 3. Para usuarios, usamos DELETE en lugar de TRUNCATE para no borrarte a ti mismo
+        usuario_actual = session.get('usuario')
+        cursor.execute("DELETE FROM usuarios WHERE usuario != %s", (usuario_actual,))
+        
+        # 4. Volvemos a encender la seguridad
+        cursor.execute("SET FOREIGN_KEY_CHECKS = 1;")
+        
+        mysql.connection.commit()
+        cursor.close()
+        return """
+        <h1>¡Reseteo exitoso! 🧹✨</h1>
+        <p>Todo el historial, clientes, inventario y usuarios secundarios han sido eliminados.</p>
+        <p>Los contadores (IDs) volvieron a 1.</p>
+        <h2 style="color:red;">⚠️ IMPORTANTE: Ve a tu código, borra esta ruta y vuelve a subir a GitHub para que nadie más pueda usarla.</h2>
+        <br><br>
+        <a href="/">Volver al Inicio</a>
+        """
+    except Exception as e:
+        cursor.close()
+        return f"Error al limpiar: {e}"
