@@ -15,11 +15,12 @@
     
     <!-- Estilos corporativos -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/erp.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/VENTASCSS.css') }}">
 </head>
 <body>
 
-    <!-- TU HEADER EXACTO DE PRINTPACK -->
+    <!-- HEADER EXACTO DE PRINTPACK -->
     <header>
         <div class="logo">
             <a href="{{ url_for('main.inicio') }}">
@@ -58,7 +59,7 @@
     </header>
 
     <main class="py-5">
-        <!-- AQUÍ DEBES DEJAR EL <div class="container"> QUE YA TIENEN TUS VISTAS CON LAS TABLAS -->
+        <!-- SE DEJA EL <div class="container"> QUE YA TIENEN MIS VISTAS CON LAS TABLAS -->
 
 <div class="container-fluid px-4">
     <!-- PEGA ESTE BOTÓN AQUÍ ARRIBA -->
@@ -109,11 +110,11 @@
                             <label class="form-label text-muted small">Notas de la venta (Opcional)</label>
                             <input type="text" id="notasVenta" class="form-control form-control-sm">
                         </div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h4 class="mb-0">TOTAL:</h4>
-                            <h3 class="mb-0 text-success" id="totalVenta">$0</h3>
+                        <div class="panel-total">
+                            <span class="texto-total">TOTAL A PAGAR</span>
+                            <p class="monto-total" id="totalVenta">$0</p>
                         </div>
-                        <button id="btnProcesarVenta" class="btn btn-success w-100 btn-lg" onclick="procesarVenta()">
+                        <button id="btnProcesarVenta" class="btn-facturar" onclick="procesarVenta()">
                             <i class="bi bi-check-circle"></i> Procesar Venta
                         </button>
                     </div>
