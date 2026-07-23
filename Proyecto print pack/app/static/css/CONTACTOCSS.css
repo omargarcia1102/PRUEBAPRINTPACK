@@ -96,7 +96,11 @@ main{
     color: var(--ink-soft);
     font-size: 0.9em;
     line-height: 1.5;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
+
+.info-item{ min-width: 0; }
 
 .info-item p a{
     color: var(--blue);
