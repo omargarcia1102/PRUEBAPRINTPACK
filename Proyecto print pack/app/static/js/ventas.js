@@ -3,9 +3,9 @@ let productosStock = [];
 let carrito = [];
 let modalCliente;
 
-// Inicialización al cargar el DOM
+
 document.addEventListener("DOMContentLoaded", () => {
-    // Inicializar el modal de Bootstrap de forma segura
+    
     const modalElement = document.getElementById('modalNuevoCliente');
     if (modalElement) {
         modalCliente = new bootstrap.Modal(modalElement);
@@ -15,9 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     cargarProductos();
 });
 
-// ==========================================
-// LOGICA DE CONSUMO DE APIS (FETCH)
-// ==========================================
+
 async function cargarClientes() {
     try {
         const res = await fetch('/api/clientes');
@@ -44,9 +42,7 @@ async function cargarProductos() {
     }
 }
 
-// ==========================================
-// LOGICA DEL CATÁLOGO DE PRODUCTOS
-// ==========================================
+
 function renderizarCatalogo(productos) {
     const contenedor = document.getElementById('listaProductos');
     if (!contenedor) return;
@@ -82,9 +78,7 @@ function filtrarProductos() {
     renderizarCatalogo(filtrados);
 }
 
-// ==========================================
-// LOGICA DEL CARRITO DE COMPRAS
-// ==========================================
+
 function agregarAlCarrito(idProducto) {
     const prod = productosStock.find(p => p.id === idProducto);
     if (!prod || prod.stock <= 0) return;
@@ -127,19 +121,19 @@ function modificarCantidad(idProducto, delta) {
     actualizarUI();
 }
 
-// NUEVA FUNCIÓN: Permite la escritura manual de datos validando los límites
+
 function cambiarCantidadManual(idProducto, valor) {
     const item = carrito.find(i => i.id_producto === idProducto);
     if (!item) return;
 
     let nuevaCantidad = parseInt(valor);
 
-    // Validar que sea un número real y positivo
+   
     if (isNaN(nuevaCantidad) || nuevaCantidad <= 0) {
         alert("Cantidad inválida. Se restablecerá a 1.");
         item.cantidad = 1;
     } 
-    // Validar que no supere el inventario físico
+    
     else if (nuevaCantidad > item.stock_maximo) {
         alert(`Stock insuficiente. Solo quedan ${item.stock_maximo} unidades disponibles.`);
         item.cantidad = item.stock_maximo;
@@ -190,9 +184,7 @@ function actualizarUI() {
     document.getElementById('totalVenta').innerText = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(total);
 }
 
-// ==========================================
-// PROCESAMIENTO DE ORDEN (POST)
-// ==========================================
+
 async function procesarVenta() {
     const idCliente = document.getElementById('selectCliente').value;
     const notas = document.getElementById('notasVenta').value;
@@ -223,7 +215,7 @@ async function procesarVenta() {
             document.getElementById('notasVenta').value = '';
             document.getElementById('selectCliente').value = '';
             actualizarUI();
-            await cargarProductos(); // Sincroniza stocks en tiempo real
+            await cargarProductos();
         } else {
             alert('Error en servidor: ' + data.mensaje);
         }
@@ -235,9 +227,7 @@ async function procesarVenta() {
     }
 }
 
-// ==========================================
-// GESTIÓN DE CLIENTES DESDE MODAL
-// ==========================================
+
 function mostrarModalCliente() {
     document.getElementById('formCliente').reset();
     if (modalCliente) modalCliente.show();
