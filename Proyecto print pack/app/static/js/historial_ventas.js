@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     cargarVentas();
 });
 
-// Consumir API para obtener todas las ventas
+
 async function cargarVentas() {
     try {
         const response = await fetch('/api/ventas');
@@ -21,7 +21,7 @@ async function cargarVentas() {
     }
 }
 
-// Renderizar la tabla principal
+
 function renderizarTablaVentas(ventas) {
     const tbody = document.getElementById('tablaVentas');
     if (!tbody) return;
@@ -48,7 +48,7 @@ function renderizarTablaVentas(ventas) {
     });
 }
 
-// Filtrar ventas en el buscador
+
 function filtrarVentas() {
     const texto = document.getElementById('buscarFactura').value.toLowerCase();
     const filtrados = listaVentas.filter(v => 
@@ -58,7 +58,7 @@ function filtrarVentas() {
     renderizarTablaVentas(filtrados);
 }
 
-// Consumir API para ver el detalle de una factura específica
+
 async function verDetalle(idVenta) {
     try {
         const response = await fetch(`/api/ventas/${idVenta}`);
@@ -70,7 +70,7 @@ async function verDetalle(idVenta) {
 
         const data = await response.json();
 
-        // Extraemos los dos bloques de datos exactos que envía tu servidor
+      
         const venta = data.venta;
         const detalles = data.detalle;
 
@@ -79,13 +79,13 @@ async function verDetalle(idVenta) {
             return;
         }
 
-        // 1. LLENAR DATOS DE LA CABECERA (Usando el bloque 'venta')
+        
         document.getElementById('tituloModalFactura').innerText = `Factura #${venta.id || idVenta}`;
         document.getElementById('detalleCliente').innerText = venta.nombre_cliente || venta.cliente || 'N/A';
         document.getElementById('detalleFecha').innerText = venta.fecha ? new Date(venta.fecha).toLocaleString('es-CO') : 'N/A';
         document.getElementById('detalleTotal').innerText = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(venta.total || 0);
 
-        // 2. PROCESAR PRODUCTOS VINCULADOS (Usando el bloque 'detalle')
+        
         const tbodyItems = document.getElementById('tablaDetalleItems');
         
         if (tbodyItems) {
