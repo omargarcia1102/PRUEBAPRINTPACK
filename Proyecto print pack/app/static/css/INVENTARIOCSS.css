@@ -12,6 +12,7 @@ main{
     max-width: 1280px;
     margin: 0 auto;
     align-items: start;
+    min-width: 0;
 }
 
 
@@ -79,7 +80,7 @@ main{
 .admin-options a.link-excel:hover{ background: #e5f5ea; }
 
 
-.inventario-main{ display: flex; flex-direction: column; gap: 22px; }
+.inventario-main{ display: flex; flex-direction: column; gap: 22px; min-width: 0; }
 
 .inventario-stats{
     display: grid;
@@ -191,6 +192,13 @@ main{
     font-size: 0.85em;
     color: var(--ink-soft);
     font-weight: 600;
+}
+
+.date-lbl{
+    font-size: 0.8em;
+    color: var(--ink-muted);
+    font-weight: 600;
+    margin-bottom: -6px;
 }
 
 .form-section-lbl{
@@ -404,6 +412,18 @@ main{
         gap: 8px;
         padding-bottom: 4px;
         -webkit-overflow-scrolling: touch;
+    }
+    .inventario-sidebar{ position: relative; }
+    .inventario-sidebar::after{
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 74px;
+        bottom: 16px;
+        width: 28px;
+        background: linear-gradient(90deg, transparent, var(--bg) 80%);
+        pointer-events: none;
+        border-radius: 0 var(--radius-md) var(--radius-md) 0;
     }
     .admin-options a{
         flex: 0 0 auto;
