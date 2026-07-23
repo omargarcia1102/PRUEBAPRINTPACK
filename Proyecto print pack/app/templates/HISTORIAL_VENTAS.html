@@ -5,22 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PrintPack - Historial de Ventas</title>
     
-    <!-- Fuentes y conectores -->
+    
     <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Bootstrap para tablas y modales -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     
-    <!-- Estilos corporativos -->
+    
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/erp.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/HISTORIAL_VENTASCSS.css') }}">
 </head>
 <body>
 
-    <!-- HEADER EXACTO DE PRINTPACK -->
+    
     <header>
         <div class="logo">
             <a href="{{ url_for('main.inicio') }}">
@@ -29,28 +29,28 @@
         </div>
         <nav>
             <ul>
-                <!-- Enlaces públicos -->
+                
                 <li><a href="{{ url_for('main.inicio') }}">Inicio</a></li>
                 <li><a href="{{ url_for('main.procesos') }}">Procesos</a></li>
                 <li><a href="{{ url_for('main.productos') }}">Productos</a></li>
                 <li><a href="{{ url_for('main.contacto') }}">Contáctanos</a></li>
                 
-                <!-- Enlaces privados -->
+                
                 {% if session.get('rol') %}
                     
-                    <!-- Solo el Admin ve el botón de Inventario directo -->
+                   
                     {% if session.get('rol') == 'admin' %}
                         <li><a href="{{ url_for('main.inventario') }}">Inventario</a></li>
                     {% endif %}
 
-                    <!-- Ambos (Admin y Asesor) ven el Panel ERP -->
+                    
                     <li><a href="{{ url_for('main.dashboard') }}" class="active">Panel ERP</a></li>
                     
                 {% endif %}
             </ul>
         </nav>
 
-        <!-- Botón dinámico: Cambia automáticamente sin usar JavaScript -->
+        
         {% if session.get('rol') %}
             <a href="{{ url_for('main.logout') }}" class="btn-nav">Cerrar Sesión ({{ session.get('rol') | upper }})</a>
         {% else %}
@@ -63,12 +63,12 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
                 
-                <!-- Botón de volver -->
+                
                 <a href="{{ url_for('main.dashboard') }}" class="btn-back-erp" style="margin-bottom: 0;">
                     <i class="fa-solid fa-arrow-left"></i> Volver al Panel ERP
                 </a>
                 
-                <!-- Botón de Excel recuperado -->
+                
                 <a href="/api/exportar/ventas" class="btn btn-success shadow-sm" style="background-color: #1c7a3d; border: none; font-weight: 600;">
                     <i class="fa-solid fa-file-excel"></i> Exportar a Excel
                 </a>
@@ -93,7 +93,7 @@
                         </tr>
                     </thead>
                     <tbody id="tablaVentas">
-                        <!-- Renderizado dinámico vía JS -->
+                        
                     </tbody>
                 </table>
             </div>
@@ -101,7 +101,7 @@
     </div>
 </div>
 
-<!-- MODAL: DETALLE DE FACTURA -->
+
 <div class="modal fade" id="modalDetalleVenta" tabindex="-1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -129,7 +129,7 @@
                 </tr>
             </thead>
             <tbody id="tablaDetalleItems">
-                <!-- Renderizado dinámico vía JS -->
+                
             </tbody>
         </table>
       </div>
@@ -144,7 +144,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<!-- ARCHIVO JS SEPARADO -->
+
 <script src="{{ url_for('static', filename='js/historial_ventas.js') }}"></script>
         </main>
 
