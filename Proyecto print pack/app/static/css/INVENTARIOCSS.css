@@ -1,4 +1,3 @@
-
 main{
     flex: 1;
     padding: 40px 48px 60px;
@@ -407,43 +406,30 @@ main{
 
     .admin-options{
         flex-direction: row;
-        flex-wrap: nowrap;
-        overflow-x: auto;
+        flex-wrap: wrap;
         gap: 8px;
-        padding-bottom: 4px;
-        -webkit-overflow-scrolling: touch;
-    }
-    .inventario-sidebar{ position: relative; }
-    .inventario-sidebar::after{
-        content: '';
-        position: absolute;
-        right: 0;
-        top: 74px;
-        bottom: 16px;
-        width: 28px;
-        background: linear-gradient(90deg, transparent, var(--bg) 80%);
-        pointer-events: none;
-        border-radius: 0 var(--radius-md) var(--radius-md) 0;
     }
     .admin-options a{
-        flex: 0 0 auto;
+        flex: 1 1 auto;
+        justify-content: center;
         white-space: nowrap;
         font-size: 0.8em;
-        padding: 9px 14px;
+        padding: 9px 12px;
         border-left: none;
         border-bottom: 3px solid transparent;
     }
     .admin-options a.option-active{ border-left: none; border-bottom-color: var(--blue); }
 
     .admin-options hr{
+        flex-basis: 100%;
+        width: auto;
+        height: 0;
         border: none;
-        border-left: 1px solid var(--line);
-        width: 1px;
-        height: 32px;
-        margin: 0 2px;
-        flex: 0 0 auto;
+        border-top: 1px solid var(--line);
+        margin: 4px 0;
     }
     .admin-options a.link-excel{
+        flex-basis: 100%;
         white-space: nowrap;
         border-bottom: 3px solid transparent;
     }
@@ -471,6 +457,7 @@ main{
 
 @media (max-width: 400px){
     .inventario-stats{ grid-template-columns: 1fr; }
+    .admin-options a{ flex-basis: 100%; }
 }
 
 
