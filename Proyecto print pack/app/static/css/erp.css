@@ -1,0 +1,197 @@
+/* ==========================================================
+   ERP.CSS — Tema compartido para el panel administrativo
+   (Dashboard, Ventas, Clientes, Historial de Ventas, Usuarios)
+   Se carga DESPUÉS de Bootstrap y ANTES del CSS propio de
+   cada página, para que las particularidades de cada una
+   sigan pudiendo sobreescribir esto si lo necesitan.
+   ========================================================== */
+
+main{ background: var(--bg-alt); min-height: 60vh; }
+main.py-5{ padding-top: 42px !important; padding-bottom: 60px !important; }
+
+/* ---------- Encabezado de sección dentro del panel ---------- */
+main h2{
+    font-size: 1.7em;
+    letter-spacing: -0.5px;
+    color: var(--ink);
+    margin-bottom: 22px;
+}
+
+/* ---------- Botón "Volver al Panel ERP" ---------- */
+.btn-back-erp i{ font-size: 0.85em; }
+
+/* ---------- Bootstrap: recolorear a la paleta de marca ---------- */
+.bg-primary{ background-color: var(--blue) !important; }
+.text-primary{ color: var(--blue) !important; }
+
+.btn-primary{
+    background-color: var(--blue) !important;
+    border-color: var(--blue) !important;
+    font-weight: 600;
+    border-radius: 6px !important;
+}
+.btn-primary:hover, .btn-primary:focus{
+    background-color: var(--blue-dark) !important;
+    border-color: var(--blue-dark) !important;
+}
+
+.btn-secondary{
+    background-color: #eef0f4 !important;
+    border-color: #eef0f4 !important;
+    color: var(--ink-soft) !important;
+    font-weight: 600;
+    border-radius: 6px !important;
+}
+.btn-secondary:hover{ background-color: #e2e4ea !important; color: var(--ink) !important; }
+
+.btn-light{
+    background: #fff !important;
+    border: none !important;
+    color: var(--blue) !important;
+    font-weight: 700 !important;
+    border-radius: 6px !important;
+}
+.btn-light:hover{ background: var(--blue-tint) !important; }
+
+.form-control:focus, .form-select:focus{
+    border-color: var(--blue) !important;
+    box-shadow: 0 0 0 0.2rem rgba(10,75,214,0.15) !important;
+}
+
+.badge{
+    font-weight: 600;
+    letter-spacing: .3px;
+    padding: 0.45em 0.75em;
+    border-radius: 6px;
+}
+.badge.bg-primary{ background-color: var(--blue) !important; }
+.badge.bg-secondary{ background-color: #e5e7eb !important; color: #4b5563 !important; }
+
+/* ---------- Botones de acción "outline" en tablas ---------- */
+.btn-outline-primary{
+    color: var(--blue) !important;
+    border-color: var(--blue) !important;
+}
+.btn-outline-primary:hover{
+    background-color: var(--blue) !important;
+    border-color: var(--blue) !important;
+    color: #fff !important;
+}
+.btn-outline-info{
+    color: #0369a1 !important;
+    border-color: #7dd3fc !important;
+}
+.btn-outline-info:hover{
+    background-color: #0369a1 !important;
+    border-color: #0369a1 !important;
+    color: #fff !important;
+}
+.btn-outline-dark{
+    color: var(--ink) !important;
+    border-color: var(--line-strong) !important;
+}
+.btn-outline-dark:hover{
+    background-color: var(--ink) !important;
+    border-color: var(--ink) !important;
+    color: #fff !important;
+}
+.btn-outline-danger:hover{
+    background-color: var(--red) !important;
+    border-color: var(--red) !important;
+}
+
+/* ---------- Barra de acciones de cabecera (título + botón) ---------- */
+.d-flex.justify-content-between.align-items-center.mb-4{
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+/* ---------- Tarjetas / modales: consistencia general ---------- */
+.card{ border: none; }
+.modal-dialog{ margin: 1rem auto; }
+
+/* ---------- Punto de venta: catálogo y carrito ---------- */
+.carrito-container{
+    max-height: 340px;
+    overflow-y: auto;
+    background: var(--bg-alt);
+}
+
+.catalogo-container{
+    max-height: 560px;
+    overflow-y: auto;
+}
+
+.producto-card{
+    border: 1px solid var(--line) !important;
+    border-radius: 10px !important;
+    cursor: pointer;
+    transition: transform .15s, border-color .15s, box-shadow .15s;
+}
+.producto-card:hover{
+    transform: translateY(-3px);
+    border-color: var(--blue) !important;
+    box-shadow: 0 8px 18px rgba(13,15,20,0.08);
+}
+.producto-card.opacity-50{ cursor: not-allowed; }
+
+/* ---------- Total a pagar (Punto de Venta) ---------- */
+.panel-total{ margin-top: 0 !important; }
+
+/* ---------- Ticket / detalle de factura ---------- */
+.ticket-total{ font-family: 'Archivo Black', sans-serif; }
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+/* ---- Tablet (768px – 1024px) ---- */
+@media (max-width: 1024px) and (min-width: 768px){
+    main.py-5{ padding-top: 30px !important; padding-bottom: 44px !important; }
+    .container, .container-fluid{ padding-left: 20px; padding-right: 20px; }
+}
+
+/* ---- Móvil (<768px) ---- */
+@media (max-width: 767px){
+    main.py-5{ padding-top: 22px !important; padding-bottom: 36px !important; }
+    .container, .container-fluid{ padding-left: 14px; padding-right: 14px; }
+
+    main h2{ font-size: 1.35em; margin-bottom: 16px; }
+
+    .card-header{ flex-wrap: wrap; gap: 10px; padding: 0.9rem 1rem !important; }
+    .card-header h5{ font-size: 0.95em; }
+    .card-header input.form-control-sm{ width: 100% !important; }
+
+    .card-body{ padding: 1rem !important; }
+
+    .table{ font-size: 0.82em; }
+    .table thead th, .table tbody td{ padding: 0.6rem 0.5rem !important; }
+
+    .btn-back-erp{ font-size: 0.85em; margin-bottom: 16px; }
+
+    /* Botón de exportar / acciones secundarias a ancho completo */
+    .d-flex.justify-content-between.align-items-center.mb-4{
+        flex-direction: column;
+        align-items: stretch !important;
+    }
+    .d-flex.justify-content-between.align-items-center.mb-4 > a,
+    .d-flex.justify-content-between.align-items-center.mb-4 > button{
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Punto de venta: catálogo y carrito más compactos */
+    .carrito-container{ max-height: 220px; }
+    .catalogo-container{ max-height: 380px; }
+    .monto-total{ font-size: 1.9rem; }
+
+    /* Modales a ancho casi completo, con márgenes cómodos */
+    .modal-dialog{ margin: 0.75rem; }
+    .modal-body{ padding: 1rem 1.1rem; }
+    .modal-footer{ flex-wrap: wrap; }
+    .modal-footer .btn{ flex: 1 1 auto; }
+
+    /* Panel ERP (Dashboard) */
+    .dashboard-header{ padding: 40px 22px !important; }
+    .dashboard-header h1{ font-size: 1.9em !important; }
+}
