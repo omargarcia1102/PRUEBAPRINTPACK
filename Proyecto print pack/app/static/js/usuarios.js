@@ -50,7 +50,7 @@ function renderizarTabla(usuarios) {
 function abrirModalUsuario() {
     usuarioEditandoId = null;
     document.getElementById('formUsuario').reset();
-    document.getElementById('userNombre').disabled = false; // Se puede editar nombre al crear
+    document.getElementById('userNombre').disabled = false; 
     document.getElementById('tituloModalUser').innerText = "Nuevo Usuario";
     document.getElementById('notaPassword').style.display = "none";
     modalUsuario.show();
@@ -64,7 +64,7 @@ function abrirModalEditar(id) {
 
     document.getElementById('formUsuario').reset();
     document.getElementById('userNombre').value = usuario.usuario;
-    document.getElementById('userNombre').disabled = true; // Por seguridad, no cambiamos el nombre de usuario, solo clave/rol
+    document.getElementById('userNombre').disabled = true; 
     document.getElementById('userRol').value = usuario.rol;
     document.getElementById('userEstado').value = usuario.estado;
 
