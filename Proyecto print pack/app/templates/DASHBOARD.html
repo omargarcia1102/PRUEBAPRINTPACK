@@ -9,10 +9,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/DASHBOARDCSS.css') }}">
     
-    <!-- base corporativa -->
+    
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/erp.css') }}">
-    <!-- Reutiliza el CSS de Inicio para las tarjetas -->
+    
     <link rel="stylesheet" href="{{ url_for('static', filename='css/INICIOCSS.css') }}">
 </head>
 <body>
@@ -25,28 +25,28 @@
         </div>
         <nav>
             <ul>
-                <!-- Enlaces públicos -->
+                
                 <li><a href="{{ url_for('main.inicio') }}">Inicio</a></li>
                 <li><a href="{{ url_for('main.procesos') }}">Procesos</a></li>
                 <li><a href="{{ url_for('main.productos') }}">Productos</a></li>
                 <li><a href="{{ url_for('main.contacto') }}">Contáctanos</a></li>
                 
-                <!-- Enlaces privados -->
+               
                 {% if session.get('rol') %}
                     
-                    <!-- Solo el Admin ve el botón de Inventario directo -->
+                    
                     {% if session.get('rol') == 'admin' %}
                         <li><a href="{{ url_for('main.inventario') }}">Inventario</a></li>
                     {% endif %}
 
-                    <!-- Ambos (Admin y Asesor) ven el Panel ERP -->
+                    
                     <li><a href="{{ url_for('main.dashboard') }}" class="active">Panel ERP</a></li>
                     
                 {% endif %}
             </ul>
         </nav>
 
-        <!-- Botón dinámico: Cambia automáticamente sin usar JavaScript -->
+       
         {% if session.get('rol') %}
             <a href="{{ url_for('main.logout') }}" class="btn-nav">Cerrar Sesión ({{ session.get('rol') | upper }})</a>
         {% else %}
@@ -57,7 +57,7 @@
     <main>
         <section class="dashboard-header">
             <h1>Centro de Control ERP</h1>
-            <!-- Usamos Jinja2 para poner el nombre instantáneamente, con la primera letra en mayúscula -->
+            
             <p style="color: #9ca3af; font-size: 1.2rem;">
             Bienvenido al sistema de gestión, <strong style="color: white;">{{ session.get('usuario') | capitalize }}</strong>
         </p>
@@ -69,7 +69,7 @@
             
             <div class="highlights-grid">
                 
-                <!-- MÓDULO VENTAS (Visible para todos) -->
+                
                 <a href="/ventas" class="card-erp-link">
                     <div class="highlight-card">
                         <i class="fa-solid fa-cart-shopping"></i>
@@ -78,7 +78,7 @@
                     </div>
                 </a>
 
-                <!-- MÓDULO HISTORIAL (Visible para todos) -->
+                
                 <a href="/historial-ventas" class="card-erp-link">
                     <div class="highlight-card">
                         <i class="fa-solid fa-receipt"></i>
@@ -87,7 +87,7 @@
                     </div>
                 </a>
 
-                <!-- MÓDULO CLIENTES (Visible para todos) -->
+                
                 <a href="/clientes" class="card-erp-link">
                     <div class="highlight-card">
                         <i class="fa-solid fa-users"></i>
@@ -96,12 +96,10 @@
                     </div>
                 </a>
 
-                <!-- ========================================== -->
-                <!-- MÓDULOS RESTRINGIDOS: SOLO PARA EL ADMIN   -->
-                <!-- ========================================== -->
+                
                 {% if session.get('rol') == 'admin' %}
 
-                    <!-- MÓDULO INVENTARIO -->
+                    
                     <a href="{{ url_for('main.inventario') }}" class="card-erp-link">
                         <div class="highlight-card">
                             <i class="fa-solid fa-boxes-stacked"></i>
@@ -110,7 +108,7 @@
                         </div>
                     </a>
 
-                    <!-- MÓDULO USUARIOS -->
+                 
                    
                     <a href="/usuarios" class="card-erp-link">
                         <div class="highlight-card" style="border-left: 4px solid var(--red);">
