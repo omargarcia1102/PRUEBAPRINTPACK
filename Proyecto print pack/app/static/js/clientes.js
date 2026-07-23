@@ -1,6 +1,6 @@
 let modalCliente;
-let listaClientesGlobal = []; // Memoria temporal para poder editar
-let clienteEditandoId = null; // Saber si estamos creando o editando
+let listaClientesGlobal = []; 
+let clienteEditandoId = null; 
 
 document.addEventListener("DOMContentLoaded", () => {
     const modalElement = document.getElementById('modalNuevoCliente');
@@ -10,9 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     cargarClientes();
 });
 
-// ==========================================
-// 1. CARGAR DATOS (GET)
-// ==========================================
+
 async function cargarClientes() {
     try {
         const response = await fetch('/api/clientes');
@@ -26,9 +24,7 @@ async function cargarClientes() {
     }
 }
 
-// ==========================================
-// 2. RENDERIZAR TABLA
-// ==========================================
+
 function renderizarTabla(clientes) {
     const tbody = document.getElementById('tablaClientes');
     if (!tbody) return;
@@ -57,37 +53,33 @@ function renderizarTabla(clientes) {
     });
 }
 
-// ==========================================
-// 3. MANEJO DEL MODAL (NUEVO VS EDITAR)
-// ==========================================
+
 function abrirModalCliente() {
-    clienteEditandoId = null; // Limpiamos el ID porque es uno nuevo
+    clienteEditandoId = null; 
     document.getElementById('formCliente').reset();
     document.querySelector('.modal-title').innerText = "Nuevo Cliente";
     modalCliente.show();
 }
 
 function abrirModalEditar(id) {
-    clienteEditandoId = id; // Guardamos el ID del cliente que vamos a editar
+    clienteEditandoId = id; 
     
-    // Buscamos los datos exactos de ese cliente en nuestra memoria global
+   
     const cliente = listaClientesGlobal.find(c => c.id === id);
     if (!cliente) return;
 
-    // Llenamos el formulario con sus datos actuales
+   
     document.getElementById('cliNombre').value = cliente.nombre || '';
     document.getElementById('cliTelefono').value = cliente.telefono || '';
     document.getElementById('cliEmpresa').value = cliente.empresa || '';
     document.getElementById('cliEmail').value = cliente.email || '';
 
-    // Cambiamos el título visualmente
+    
     document.querySelector('.modal-title').innerText = "Editar Cliente";
     modalCliente.show();
 }
 
-// ==========================================
-// 4. GUARDAR DATOS (POST o PUT)
-// ==========================================
+
 async function guardarCliente() {
     const nombre = document.getElementById('cliNombre').value.trim();
     const telefono = document.getElementById('cliTelefono').value.trim();
@@ -107,7 +99,7 @@ async function guardarCliente() {
     boton.disabled = true;
     boton.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Guardando...';
 
-    // LÓGICA CLAVE: Si hay un ID guardado, es PUT (Editar). Si es null, es POST (Crear).
+    
     const url = clienteEditandoId ? `/api/clientes/${clienteEditandoId}` : '/api/clientes';
     const metodoHTTP = clienteEditandoId ? 'PUT' : 'POST';
 
@@ -123,7 +115,7 @@ async function guardarCliente() {
         if (response.ok && data.ok) {
             alert(clienteEditandoId ? "¡Cliente actualizado con éxito!" : "¡Cliente registrado con éxito!");
             modalCliente.hide();
-            cargarClientes(); // Recargar la tabla automáticamente con los nuevos datos
+            cargarClientes(); 
         } else {
             alert("Error: " + (data.mensaje || "Revisa la conexión."));
         }
