@@ -6,7 +6,7 @@
    sigan pudiendo sobreescribir esto si lo necesitan.
    ========================================================== */
 
-main{ background: var(--bg-alt); min-height: 60vh; }
+main{ background: var(--bg-alt); flex: 1; min-height: 60vh; }
 main.py-5{ padding-top: 42px !important; padding-bottom: 60px !important; }
 
 /* ---------- Encabezado de sección dentro del panel ---------- */
