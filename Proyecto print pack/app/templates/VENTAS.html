@@ -5,22 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PrintPack - Punto de Venta</title>
     
-    <!-- Fuentes y conectores -->
+    
     <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Bootstrap para la estructura -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     
-    <!-- Estilos corporativos -->
+    
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/erp.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/VENTASCSS.css') }}">
 </head>
 <body>
 
-    <!-- HEADER EXACTO DE PRINTPACK -->
+    
     <header>
         <div class="logo">
             <a href="{{ url_for('main.inicio') }}">
@@ -29,28 +29,28 @@
         </div>
         <nav>
             <ul>
-                <!-- Enlaces públicos -->
+               
                 <li><a href="{{ url_for('main.inicio') }}">Inicio</a></li>
                 <li><a href="{{ url_for('main.procesos') }}">Procesos</a></li>
                 <li><a href="{{ url_for('main.productos') }}">Productos</a></li>
                 <li><a href="{{ url_for('main.contacto') }}">Contáctanos</a></li>
                 
-                <!-- Enlaces privados -->
+                
                 {% if session.get('rol') %}
                     
-                    <!-- Solo el Admin ve el botón de Inventario directo -->
+                    
                     {% if session.get('rol') == 'admin' %}
                         <li><a href="{{ url_for('main.inventario') }}">Inventario</a></li>
                     {% endif %}
 
-                    <!-- Ambos (Admin y Asesor) ven el Panel ERP -->
+                    
                     <li><a href="{{ url_for('main.dashboard') }}" class="active">Panel ERP</a></li>
                     
                 {% endif %}
             </ul>
         </nav>
 
-        <!-- Botón dinámico: Cambia automáticamente sin usar JavaScript -->
+        
         {% if session.get('rol') %}
             <a href="{{ url_for('main.logout') }}" class="btn-nav">Cerrar Sesión ({{ session.get('rol') | upper }})</a>
         {% else %}
@@ -59,16 +59,16 @@
     </header>
 
     <main class="py-5">
-        <!-- SE DEJA EL <div class="container"> QUE YA TIENEN MIS VISTAS CON LAS TABLAS -->
+        
 
 <div class="container-fluid px-4">
-    <!-- PEGA ESTE BOTÓN AQUÍ ARRIBA -->
+    
             <a href="{{ url_for('main.dashboard') }}" class="btn-back-erp">
                 <i class="fa-solid fa-arrow-left"></i> Volver al Panel ERP
             </a>
     <h2>Punto de venta</h2>
     <div class="row">
-        <!-- DETALLE DE FACTURACIÓN -->
+        
         <div class="col-lg-5 mb-4">
             <div class="card shadow-sm h-100">
                 <div class="card-header bg-primary text-white">
@@ -100,7 +100,7 @@
                                 </tr>
                             </thead>
                             <tbody id="tablaCarrito">
-                                <!-- Render dinámico mediante controlador JS -->
+                                
                             </tbody>
                         </table>
                     </div>
@@ -122,7 +122,7 @@
             </div>
         </div>
 
-        <!-- CATÁLOGO DE PRODUCTOS -->
+        
         <div class="col-lg-7 mb-4">
             <div class="card shadow-sm h-100">
                 <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
@@ -131,7 +131,7 @@
                 </div>
                 <div class="card-body catalogo-container bg-light">
                     <div class="row g-3" id="listaProductos">
-                        <!-- Render dinámico mediante controlador JS -->
+                        
                     </div>
                 </div>
             </div>
@@ -139,7 +139,7 @@
     </div>
 </div>
 
-<!-- MODAL REGISTRO DE CLIENTES -->
+
 <div class="modal fade" id="modalNuevoCliente" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -175,10 +175,10 @@
   </div>
 </div>
 
-<!-- Dependencias -->
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- ENLACE AL CONTROLADOR JS SEPARADO (ESTRUCTURA MVC DE FLASK) -->
+
 <script src="{{ url_for('static', filename='js/ventas.js') }}"></script>
 
         </main>
